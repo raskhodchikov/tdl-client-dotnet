@@ -1,0 +1,10 @@
+/.vs
+/src/.vs
+/src/Test/obj
+/src/Test/bin
+/src/client/obj
+/src/client/bin
+/src/demo/obj
+/src/demo/bin
+/src/core/obj
+/src/core/bin
