@@ -1,0 +1,6 @@
+[submodule "broker"]
+	path = broker
+	url = https://github.com/julianghionoiu/tdl-client-test-broker
+[submodule "test/specs/client"]
+	path = test/specs/client
+	url = https://github.com/julianghionoiu/tdl-client-spec

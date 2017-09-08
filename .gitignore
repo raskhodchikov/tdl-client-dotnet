@@ -1,10 +1,15 @@
 /.vs
 /src/.vs
-/src/Test/obj
-/src/Test/bin
+/test/core/obj
+/test/core/bin
+/test/specs/obj
+/test/specs/bin
 /src/client/obj
 /src/client/bin
 /src/demo/obj
 /src/demo/bin
 /src/core/obj
 /src/core/bin
+/packages
+/src/packages
+/test/packages

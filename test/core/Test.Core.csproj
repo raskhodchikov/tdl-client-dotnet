@@ -16,8 +16,4 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.1.18" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\client\client.csproj" />
-  </ItemGroup>
-
 </Project>
