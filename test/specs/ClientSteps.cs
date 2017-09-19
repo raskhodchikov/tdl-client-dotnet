@@ -1,4 +1,5 @@
-﻿using TDL.Test.Specs.Utils;
+﻿using NUnit.Framework;
+using TDL.Test.Specs.Utils;
 using TDL.Test.Specs.Utils.Jmx.Broker;
 using TechTalk.SpecFlow;
 
@@ -12,7 +13,7 @@ namespace TDL.Test.Specs
 
         private readonly RemoteJmxQueue requestQueue;
 
-        private int requestCount = 0;
+        private long requestCount;
 
         public ClientSteps()
         {
@@ -23,7 +24,7 @@ namespace TDL.Test.Specs
         [Given(@"I start with a clean broker")]
         public void GivenIStartWithACleanBroker()
         {
-            //ScenarioContext.Current.Pending();
+            ScenarioContext.Current.Pending();
         }
 
         [Given(@"I receive the following requests:")]
@@ -47,37 +48,41 @@ namespace TDL.Test.Specs
         {
             ScenarioContext.Current.Pending();
         }
-        
+
         [Then(@"the client should consume all requests")]
         public void ThenTheClientShouldConsumeAllRequests()
         {
-            ScenarioContext.Current.Pending();
+            Assert.AreEqual(0, requestQueue.GetSize(),
+                "Requests have not been consumed.");
         }
-        
+
         [Then(@"the client should publish the following responses:")]
         public void ThenTheClientShouldPublishTheFollowingResponses(Table table)
         {
             ScenarioContext.Current.Pending();
         }
-        
+
         [Then(@"the client should not consume any request")]
         public void ThenTheClientShouldNotConsumeAnyRequest()
         {
-            ScenarioContext.Current.Pending();
+            Assert.AreEqual(requestCount, requestQueue.GetSize(),
+                "The request queue has different size. The message has been consumed.");
         }
-        
+
         [Then(@"the client should not publish any response")]
         public void ThenTheClientShouldNotPublishAnyResponse()
         {
-            ScenarioContext.Current.Pending();
+            Assert.AreEqual(0, requestQueue.GetSize(),
+                "The response queue has different size. Messages have been published.");
         }
-        
+
         [Then(@"the client should consume first request")]
         public void ThenTheClientShouldConsumeFirstRequest()
         {
-            ScenarioContext.Current.Pending();
+            Assert.AreEqual(requestCount - 1, requestQueue.GetSize(),
+                "Wrong number of requests have been consumed.");
         }
-        
+
         [Then(@"the client should display to console:")]
         public void ThenTheClientShouldDisplayToConsole(Table table)
         {

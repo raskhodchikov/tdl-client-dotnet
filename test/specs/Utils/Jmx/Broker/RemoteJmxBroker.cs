@@ -24,14 +24,16 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
             });
         }
 
-        //public long GetSize()
-        //{
-        //    jolokiaSession.Request(new Dictionary<string, object>
-        //    {
-        //        ["type"] = "read",
-        //        ["mbean"] = queueBean,
-        //        ["attribute"] = "QueueSize"
-        //    });
-        //}
+        public long GetSize()
+        {
+            var response = jolokiaSession.Request(new Dictionary<string, object>
+            {
+                ["type"] = "read",
+                ["mbean"] = queueBean,
+                ["attribute"] = "QueueSize"
+            });
+
+            return long.Parse(response.Value);
+        }
     }
 }
