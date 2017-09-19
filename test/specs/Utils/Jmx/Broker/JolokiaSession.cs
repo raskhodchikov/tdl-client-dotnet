@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using RestSharp;
 
 namespace TDL.Test.Specs.Utils.Jmx.Broker
@@ -21,13 +20,13 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
             return new JolokiaSession(jolokiaUri);
         }
 
-        public JolokiaResponse Request(Dictionary<string, object> jolokiaPayload)
+        public object Request(Dictionary<string, object> jolokiaPayload)
         {
-            var request = new RestRequest(Method.POST) {JsonSerializer = NewtonsoftJsonSerializer.Default};
+            var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
             request.AddJsonBody(jolokiaPayload);
 
-            var response = restClient.Execute<JolokiaResponse>(request).Data;
+            var response = restClient.Execute(request).Content;
             return response;
         }
     }
