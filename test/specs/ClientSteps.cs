@@ -1,22 +1,41 @@
-﻿using TechTalk.SpecFlow;
+﻿using TDL.Test.Specs.Utils;
+using TDL.Test.Specs.Utils.Jmx.Broker;
+using TechTalk.SpecFlow;
 
 namespace TDL.Test.Specs
 {
     [Binding]
     public class ClientSteps
     {
+        private const string Hostname = "localhost";
+        private const int Port = 28161;
+
+        private readonly RemoteJmxQueue requestQueue;
+
+        private int requestCount = 0;
+
+        public ClientSteps()
+        {
+            var jolokiaSession = JolokiaSession.Connect(Hostname, Port);
+            requestQueue = new RemoteJmxQueue(jolokiaSession, "TEST.BROKER", "TEST.QUEUE");
+        }
+
         [Given(@"I start with a clean broker")]
         public void GivenIStartWithACleanBroker()
         {
-            ScenarioContext.Current.Pending();
+            //ScenarioContext.Current.Pending();
         }
 
         [Given(@"I receive the following requests:")]
-        public void GivenIReceiveTheFollowingRequests(Table table)
+        public void GivenIReceiveTheFollowingRequests(Table messages)
         {
-            ScenarioContext.Current.Pending();
+            foreach (var message in messages.ToStringsIncludingHeader())
+            {
+                requestQueue.SendTextMessage(message);
+                requestCount++;
+            }
         }
-        
+
         [Given(@"the broker is not available")]
         public void GivenTheBrokerIsNotAvailable()
         {
