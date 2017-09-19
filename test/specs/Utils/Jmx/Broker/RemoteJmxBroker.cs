@@ -23,5 +23,15 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
                 ["arguments"] = new List<string> {message}
             });
         }
+
+        //public long GetSize()
+        //{
+        //    jolokiaSession.Request(new Dictionary<string, object>
+        //    {
+        //        ["type"] = "read",
+        //        ["mbean"] = queueBean,
+        //        ["attribute"] = "QueueSize"
+        //    });
+        //}
     }
 }
