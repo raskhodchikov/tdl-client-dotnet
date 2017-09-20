@@ -10,15 +10,20 @@ namespace TDL.Test.Specs
     {
         private const string Hostname = "localhost";
         private const int Port = 28161;
+        private const string UniqueId = "testuser@example.com";
 
         private readonly RemoteJmxQueue requestQueue;
+        private readonly RemoteJmxQueue responseQueue;
 
         private long requestCount;
 
         public ClientSteps()
         {
-            var jolokiaSession = JolokiaSession.Connect(Hostname, Port);
-            requestQueue = new RemoteJmxQueue(jolokiaSession, "TEST.BROKER", "TEST.QUEUE");
+            requestQueue = TestBroker.Instance.AddQueue($"{UniqueId}.req");
+            requestQueue.Purge();
+
+            responseQueue = TestBroker.Instance.AddQueue($"{UniqueId}.resp");
+            responseQueue.Purge();
         }
 
         [Given(@"I start with a clean broker")]
@@ -72,7 +77,7 @@ namespace TDL.Test.Specs
         [Then(@"the client should not publish any response")]
         public void ThenTheClientShouldNotPublishAnyResponse()
         {
-            Assert.AreEqual(0, requestQueue.GetSize(),
+            Assert.AreEqual(0, responseQueue.GetSize(),
                 "The response queue has different size. Messages have been published.");
         }
 

@@ -1,39 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TDL.Test.Specs.Utils.Jmx.Broker
 {
-    internal class RemoteJmxQueue
+    internal class RemoteJmxBroker
     {
         private readonly JolokiaSession jolokiaSession;
-        private readonly string queueBean;
+        private readonly string brokerName;
 
-        public RemoteJmxQueue(JolokiaSession jolokiaSession, string brokerName, string queueName)
+        private RemoteJmxBroker(JolokiaSession jolokiaSession, string brokerName)
         {
             this.jolokiaSession = jolokiaSession;
-            queueBean = $"org.apache.activemq:type=Broker,brokerName={brokerName},destinationType=Queue,destinationName={queueName}";
+            this.brokerName = brokerName;
         }
 
-        public void SendTextMessage(string message)
+        public static RemoteJmxBroker Connect(string hostname, int port, string brokerName)
+        {
+            try
+            {
+                var jolokiaSession = JolokiaSession.Connect(hostname, port);
+                return new RemoteJmxBroker(jolokiaSession, brokerName);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Broker is busted.", e);
+            }
+        }
+
+        public RemoteJmxQueue AddQueue(string queueName)
         {
             jolokiaSession.Request(new Dictionary<string, object>
             {
                 ["type"] = "exec",
-                ["mbean"] = queueBean,
-                ["operation"] = "sendTextMessage(java.lang.String)",
-                ["arguments"] = new List<string> {message}
+                ["mbean"] = $"org.apache.activemq:type=Broker,brokerName={brokerName}",
+                ["operation"] = "addQueue",
+                ["arguments"] = new List<string> {queueName}
             });
-        }
-
-        public long GetSize()
-        {
-            var response = jolokiaSession.Request(new Dictionary<string, object>
-            {
-                ["type"] = "read",
-                ["mbean"] = queueBean,
-                ["attribute"] = "QueueSize"
-            });
-
-            return long.Parse(response.Value);
+            return new RemoteJmxQueue(jolokiaSession, brokerName, queueName);
         }
     }
 }
