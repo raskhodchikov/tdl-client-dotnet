@@ -2,20 +2,20 @@
 
 namespace TDL.Client
 {
-	public class TdlClient
-	{
-		protected string m_hostname;
-		protected int m_port;
-		protected string m_uniqueId;
-		protected TimeSpan m_timeToWaitForRequests;
+    public class TdlClient
+    {
+        protected string Host;
+        protected int Port;
+        protected string UniqueId;
+        protected TimeSpan TimeToWaitForRequests;
 
 
-		public TdlClient( string hostname, int port, string uniqueId, TimeSpan timeToWaitForRequests )
-		{
-			m_hostname = hostname;
-			m_port = port;
-			m_uniqueId = uniqueId;
-			m_timeToWaitForRequests = timeToWaitForRequests;
-		}
-	}
+        public TdlClient(string host, int port, string uniqueId, TimeSpan timeToWaitForRequests)
+        {
+            Host = host;
+            Port = port;
+            UniqueId = uniqueId;
+            TimeToWaitForRequests = timeToWaitForRequests;
+        }
+    }
 }
