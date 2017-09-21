@@ -12,24 +12,19 @@ namespace TDL.Test.Specs
         private const int Port = 28161;
         private const string UniqueId = "testuser@example.com";
 
-        private readonly RemoteJmxQueue requestQueue;
-        private readonly RemoteJmxQueue responseQueue;
+        private RemoteJmxQueue requestQueue;
+        private RemoteJmxQueue responseQueue;
 
         private long requestCount;
 
-        public ClientSteps()
+        [Given(@"I start with a clean broker")]
+        public void GivenIStartWithACleanBroker()
         {
             requestQueue = TestBroker.Instance.AddQueue($"{UniqueId}.req");
             requestQueue.Purge();
 
             responseQueue = TestBroker.Instance.AddQueue($"{UniqueId}.resp");
             responseQueue.Purge();
-        }
-
-        [Given(@"I start with a clean broker")]
-        public void GivenIStartWithACleanBroker()
-        {
-            ScenarioContext.Current.Pending();
         }
 
         [Given(@"I receive the following requests:")]
