@@ -28,13 +28,12 @@ namespace TDL.Test.Specs
         }
 
         [Given(@"I receive the following requests:")]
-        public void GivenIReceiveTheFollowingRequests(Table messages)
+        public void GivenIReceiveTheFollowingRequests(Table table)
         {
-            foreach (var message in messages.ToStringsIncludingHeader())
-            {
-                requestQueue.SendTextMessage(message);
-                requestCount++;
-            }
+            var requests = table.ToList();
+
+            requests.ForEach(requestQueue.SendTextMessage);
+            requestCount = requests.Count;
         }
 
         [Given(@"the broker is not available")]
