@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using TDL.Test.Specs.Utils;
+using TDL.Test.Specs.Utils.Extensions;
 using TDL.Test.Specs.Utils.Jmx.Broker;
 using TechTalk.SpecFlow;
 

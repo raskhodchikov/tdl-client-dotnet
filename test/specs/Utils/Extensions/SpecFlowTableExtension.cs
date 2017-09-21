@@ -2,7 +2,7 @@
 using System.Linq;
 using TechTalk.SpecFlow;
 
-namespace TDL.Test.Specs.Utils
+namespace TDL.Test.Specs.Utils.Extensions
 {
     internal static class SpecFlowTableExtensions
     {

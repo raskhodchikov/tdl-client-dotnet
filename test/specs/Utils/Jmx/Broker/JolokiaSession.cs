@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using RestSharp;
 using RestSharp.Deserializers;
+using TDL.Test.Specs.Utils.Jmx.Broker.JolokiaResponses;
+using TDL.Test.Specs.Utils.Serializers;
 
 namespace TDL.Test.Specs.Utils.Jmx.Broker
 {
@@ -11,7 +13,7 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
         private readonly RestClient restClient;
         private readonly JsonDeserializer jsonDeserializer;
 
-        public JolokiaSession(Uri jolokiaUri)
+        private JolokiaSession(Uri jolokiaUri)
         {
             restClient = new RestClient(jolokiaUri);
             jsonDeserializer = new JsonDeserializer();
@@ -24,16 +26,26 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
             return new JolokiaSession(jolokiaUri);
         }
 
-        public JolokiaResponse Request(Dictionary<string, object> jolokiaPayload)
+        public JolokiaResponse<string> Request(Dictionary<string, object> jolokiaPayload)
         {
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-Type", "application/json");
+            return Request<string>(jolokiaPayload);
+        }
+
+        public JolokiaResponse<T> Request<T>(Dictionary<string, object> jolokiaPayload)
+        {
+            var request = new RestRequest(Method.POST)
+            {
+                RequestFormat = DataFormat.Json,
+                JsonSerializer = NewtonsoftJsonSerializer.Default,
+                OnBeforeDeserialization = r => { r.ContentType = MimeType.Json; }
+            };
+            request.AddHeader("Content-Type", MimeType.Json);
             request.AddJsonBody(jolokiaPayload);
 
             var rawResponse = restClient.Execute(request);
             ValidateResponse(rawResponse.StatusCode, rawResponse.Content);
 
-            var response = jsonDeserializer.Deserialize<JolokiaResponse>(rawResponse);
+            var response = jsonDeserializer.Deserialize<JolokiaResponse<T>>(rawResponse);
             ValidateResponse(response.Status, $"{response.ErrorType} {response.Error}");
 
             return response;
