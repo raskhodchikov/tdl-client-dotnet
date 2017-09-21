@@ -69,7 +69,6 @@
     <Compile Include="Utils\Jmx\Broker\RemoteJmxQueue.cs" />
     <Compile Include="Utils\Extensions\SpecFlowTableExtension.cs" />
     <Compile Include="Utils\MimeType.cs" />
-    <Compile Include="Utils\Serializers\NewtonsoftJsonSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

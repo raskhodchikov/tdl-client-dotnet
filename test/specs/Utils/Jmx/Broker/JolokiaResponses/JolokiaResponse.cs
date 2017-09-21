@@ -1,29 +1,29 @@
 ﻿using System.Net;
-using Newtonsoft.Json;
+using RestSharp.Deserializers;
 
 namespace TDL.Test.Specs.Utils.Jmx.Broker.JolokiaResponses
 {
     internal class JolokiaResponse
     {
-        [JsonProperty("status")]
+        [DeserializeAs(Name = "status")]
         public HttpStatusCode Status { get; set; }
 
-        [JsonProperty("timestamp")]
+        [DeserializeAs(Name = "timestamp")]
         public long Timestamp { get; set; }
 
-        [JsonProperty("error_type")]
+        [DeserializeAs(Name = "error_type")]
         public string ErrorType { get; set; }
 
-        [JsonProperty("error")]
+        [DeserializeAs(Name = "error")]
         public string Error { get; set; }
 
-        [JsonProperty("stacktrace")]
+        [DeserializeAs(Name = "stacktrace")]
         public string Stacktrace { get; set; }
     }
 
     internal class JolokiaResponse<T> : JolokiaResponse
     {
-        [JsonProperty("value")]
+        [DeserializeAs(Name = "value")]
         public T Value { get; set; }
     }
 }

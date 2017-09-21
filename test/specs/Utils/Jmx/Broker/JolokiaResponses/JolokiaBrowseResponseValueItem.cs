@@ -1,10 +1,10 @@
-using Newtonsoft.Json;
+using RestSharp.Deserializers;
 
 namespace TDL.Test.Specs.Utils.Jmx.Broker.JolokiaResponses
 {
     internal class JolokiaBrowseResponseValueItem
     {
-        [JsonProperty("Text")]
+        [DeserializeAs(Name = "Text")]
         public string Text { get; set; }
     }
 }
