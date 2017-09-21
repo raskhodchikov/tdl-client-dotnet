@@ -1,5 +1,6 @@
-﻿using NUnit.Framework;
-using TDL.Test.Specs.Utils;
+﻿using System.Linq;
+using NUnit.Framework;
+using TDL.Test.Specs.Utils.Extensions;
 using TDL.Test.Specs.Utils.Jmx.Broker;
 using TechTalk.SpecFlow;
 
@@ -58,7 +59,10 @@ namespace TDL.Test.Specs
         [Then(@"the client should publish the following responses:")]
         public void ThenTheClientShouldPublishTheFollowingResponses(Table table)
         {
-            ScenarioContext.Current.Pending();
+            var expectedResponses = table.ToList();
+            var actualResponses = responseQueue.GetMessageContents();
+            Assert.IsTrue(expectedResponses.SequenceEqual(actualResponses),
+                "The responses are not correct");
         }
 
         [Then(@"the client should not consume any request")]

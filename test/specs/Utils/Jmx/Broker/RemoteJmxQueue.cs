@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using TDL.Test.Specs.Utils.Jmx.Broker.JolokiaResponses;
 
 namespace TDL.Test.Specs.Utils.Jmx.Broker
 {
@@ -26,14 +28,14 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
 
         public long GetSize()
         {
-            var response = jolokiaSession.Request(new Dictionary<string, object>
+            var response = jolokiaSession.Request<long>(new Dictionary<string, object>
             {
                 ["type"] = "read",
                 ["mbean"] = queueBean,
                 ["attribute"] = "QueueSize"
             });
 
-            return long.Parse(response.Value);
+            return response.Value;
         }
 
         public void Purge()
@@ -44,6 +46,17 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
                 ["mbean"] = queueBean,
                 ["operation"] = "purge()"
             });
+        }
+
+        public List<string> GetMessageContents()
+        {
+            var response = jolokiaSession.Request<List<JolokiaBrowseResponseValueItem>>(new Dictionary<string, object>
+            {
+                ["type"] = "exec",
+                ["mbean"] = queueBean,
+                ["operation"] = "browse()"
+            });
+            return response.Value.Select(i => i.Text).ToList();
         }
     }
 }

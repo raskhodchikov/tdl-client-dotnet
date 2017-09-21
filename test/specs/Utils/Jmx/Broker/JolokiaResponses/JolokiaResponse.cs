@@ -1,13 +1,10 @@
 ﻿using System.Net;
 using RestSharp.Deserializers;
 
-namespace TDL.Test.Specs.Utils.Jmx.Broker
+namespace TDL.Test.Specs.Utils.Jmx.Broker.JolokiaResponses
 {
     internal class JolokiaResponse
     {
-        [DeserializeAs(Name = "value")]
-        public string Value { get; set; }
-
         [DeserializeAs(Name = "status")]
         public HttpStatusCode Status { get; set; }
 
@@ -22,5 +19,11 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
 
         [DeserializeAs(Name = "stacktrace")]
         public string Stacktrace { get; set; }
+    }
+
+    internal class JolokiaResponse<T> : JolokiaResponse
+    {
+        [DeserializeAs(Name = "value")]
+        public T Value { get; set; }
     }
 }

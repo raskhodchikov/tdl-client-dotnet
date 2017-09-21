@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Net;
 using RestSharp;
-using RestSharp.Deserializers;
+using TDL.Test.Specs.Utils.Jmx.Broker.JolokiaResponses;
 
 namespace TDL.Test.Specs.Utils.Jmx.Broker
 {
     internal class JolokiaSession
     {
         private readonly RestClient restClient;
-        private readonly JsonDeserializer jsonDeserializer;
 
-        public JolokiaSession(Uri jolokiaUri)
+        private JolokiaSession(Uri jolokiaUri)
         {
             restClient = new RestClient(jolokiaUri);
-            jsonDeserializer = new JsonDeserializer();
         }
 
         public static JolokiaSession Connect(string host, int adminPort)
@@ -24,19 +22,26 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
             return new JolokiaSession(jolokiaUri);
         }
 
-        public JolokiaResponse Request(Dictionary<string, object> jolokiaPayload)
+        public JolokiaResponse<string> Request(Dictionary<string, object> jolokiaPayload)
         {
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-Type", "application/json");
+            return Request<string>(jolokiaPayload);
+        }
+
+        public JolokiaResponse<T> Request<T>(Dictionary<string, object> jolokiaPayload)
+        {
+            var request = new RestRequest(Method.POST)
+            {
+                RequestFormat = DataFormat.Json,
+                OnBeforeDeserialization = r => { r.ContentType = MimeType.Json; }
+            };
+            request.AddHeader("Content-Type", MimeType.Json);
             request.AddJsonBody(jolokiaPayload);
 
-            var rawResponse = restClient.Execute(request);
-            ValidateResponse(rawResponse.StatusCode, rawResponse.Content);
+            var response = restClient.Execute<JolokiaResponse<T>>(request);
+            ValidateResponse(response.StatusCode, response.Content);
+            ValidateResponse(response.Data.Status, $"{response.Data.ErrorType}: {response.Data.Error}");
 
-            var response = jsonDeserializer.Deserialize<JolokiaResponse>(rawResponse);
-            ValidateResponse(response.Status, $"{response.ErrorType} {response.Error}");
-
-            return response;
+            return response.Data;
         }
 
         private static void ValidateResponse(HttpStatusCode responseStatusCode, string content)
