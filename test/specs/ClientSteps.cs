@@ -43,12 +43,19 @@ namespace TDL.Test.Specs
         {
             ScenarioContext.Current.Pending();
         }
-        
+
         // TODO
         [When(@"I go live with the following processing rules:")]
         public void WhenIGoLiveWithTheFollowingProcessingRules(Table table)
         {
-            var processingRuleSpecItems = table.CreateSet<ProcessingRuleSpecItem>();
+            var processingRuleSpecItems = table.CreateSet<ProcessingRuleSpecItem>().ToList();
+
+            var processingRules = new ProcessingRules();
+            processingRuleSpecItems.ForEach(ruleSpec =>
+                processingRules
+                    .On(ruleSpec.Method)
+                    .Call(CallImplementationFactory.GetImplementation(ruleSpec.Call))
+                    .Then());
 
             ScenarioContext.Current.Pending();
         }

@@ -54,12 +54,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallImplementationFactory.cs" />
     <Compile Include="ClientSteps.cs" />
     <Compile Include="client\client.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>client.feature</DependentUpon>
     </Compile>
+    <Compile Include="ProcessingRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonTestBroker.cs" />
     <Compile Include="SpecItems\PayloadSpecItem.cs" />
