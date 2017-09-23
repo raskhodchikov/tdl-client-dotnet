@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using TDL.Client;
 using TDL.Test.Specs.SpecItems;
 using TDL.Test.Specs.Utils.Jmx.Broker;
 using TechTalk.SpecFlow;
@@ -16,6 +17,7 @@ namespace TDL.Test.Specs
 
         private RemoteJmxQueue requestQueue;
         private RemoteJmxQueue responseQueue;
+        private TdlClient client;
 
         private long requestCount;
 
@@ -27,6 +29,13 @@ namespace TDL.Test.Specs
 
             responseQueue = TestBroker.Instance.AddQueue($"{UniqueId}.resp");
             responseQueue.Purge();
+
+            client = TdlClient.Build()
+                .SetHostname(Hostname)
+                .SetPort(Port)
+                .SetUniqueId(UniqueId)
+                .SetTimeToWaitForRequests(100L)
+                .Create();
         }
 
         [Given(@"I receive the following requests:")]
@@ -54,10 +63,10 @@ namespace TDL.Test.Specs
             processingRuleSpecItems.ForEach(ruleSpec =>
                 processingRules
                     .On(ruleSpec.Method)
-                    .Call(CallImplementationFactory.GetImplementation(ruleSpec.Call))
-                    .Then());
+                    .Call(CallImplementationFactory.Get(ruleSpec.Call))
+                    .Then(ClientActionsFactory.Get(ruleSpec.Action)));
 
-            ScenarioContext.Current.Pending();
+            client.GoLiveWith(processingRules);
         }
 
         [Then(@"the client should consume all requests")]

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TDL.Test.Specs
 {
-    internal class CallImplementationFactory
+    internal static class CallImplementationFactory
     {
         private static readonly Dictionary<string, Func<string[], object>> CallImplementations =
             new Dictionary<string, Func<string[], object>>
@@ -15,7 +15,7 @@ namespace TDL.Test.Specs
                     int.Parse(args[0]) + 1
             };
 
-        public static Func<string[], object> GetImplementation(string call)
+        public static Func<string[], object> Get(string call)
         {
             if (!CallImplementations.ContainsKey(call))
             {
