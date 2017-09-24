@@ -12,7 +12,7 @@ namespace TDL.Test.Specs
     public class ClientSteps
     {
         private const string Hostname = "localhost";
-        private const int Port = 28161;
+        private const int Port = 21616;
         private const string UniqueId = "testuser@example.com";
 
         private RemoteJmxQueue requestQueue;
@@ -34,7 +34,7 @@ namespace TDL.Test.Specs
                 .SetHostname(Hostname)
                 .SetPort(Port)
                 .SetUniqueId(UniqueId)
-                .SetTimeToWaitForRequests(100L)
+                .SetTimeToWaitForRequests(5)
                 .Create();
         }
 
@@ -53,7 +53,6 @@ namespace TDL.Test.Specs
             ScenarioContext.Current.Pending();
         }
 
-        // TODO
         [When(@"I go live with the following processing rules:")]
         public void WhenIGoLiveWithTheFollowingProcessingRules(Table table)
         {
@@ -79,7 +78,7 @@ namespace TDL.Test.Specs
         [Then(@"the client should publish the following responses:")]
         public void ThenTheClientShouldPublishTheFollowingResponses(Table table)
         {
-            var expectedResponses = table.CreateSet<PayloadSpecItem>().Select(i => i.Payload);
+            var expectedResponses = table.CreateSet<PayloadSpecItem>().Select(i => i.Payload).ToList();
             var actualResponses = responseQueue.GetMessageContents();
             Assert.IsTrue(expectedResponses.SequenceEqual(actualResponses),
                 "The responses are not correct");

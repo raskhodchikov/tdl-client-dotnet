@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TDL.Client.Abstractions;
+using TDL.Client.Abstractions.Response;
 using TDL.Client.Actions;
 
 namespace TDL.Client
@@ -17,6 +18,24 @@ namespace TDL.Client
             IClientAction clientAction)
         {
             rules.Add(methodName, new ProcessingRule(userImplementation, clientAction));
+        }
+
+        public IResponse GetResponseFor(Request request)
+        {
+            if (!rules.ContainsKey(request.MethodName))
+                return new FatalErrorResponse($"Method '{request.MethodName}' did not match any processing rule.");
+
+            var processingRule = rules[request.MethodName];
+
+            try
+            {
+                var result = processingRule.UserImplementation(request.Params);
+                return new ValidResponse(request.Id, result, processingRule.ClientAction);
+            }
+            catch (Exception e)
+            {
+                return new FatalErrorResponse($"User implementation raised exception: {e.Message}");
+            }
         }
     }
 }

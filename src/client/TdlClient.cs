@@ -1,11 +1,14 @@
-﻿namespace TDL.Client
+﻿using TDL.Client.Abstractions;
+using TDL.Client.Transport;
+
+namespace TDL.Client
 {
     public partial class TdlClient
     {
-        private string hostname;
-        private int port;
-        private string uniqueId;
-        private long timeToWaitForRequests;
+        private readonly string hostname;
+        private readonly int port;
+        private readonly string uniqueId;
+        private readonly long timeToWaitForRequests;
 
         public TdlClient(
             string hostname,
@@ -23,7 +26,28 @@
 
         public void GoLiveWith(ProcessingRules processingRules)
         {
-            throw new System.NotImplementedException();
+            using (var remoteBroker = new RemoteBroker(hostname, port, uniqueId, timeToWaitForRequests))
+            {
+                var request = remoteBroker.Recieve();
+                while (request != null)
+                {
+                    request = ApplyProcessingRules(request, processingRules, remoteBroker);
+                }
+            }
+        }
+
+        private static Request ApplyProcessingRules(
+            Request request,
+            ProcessingRules processingRules,
+            RemoteBroker remoteBroker)
+        {
+            var response = processingRules.GetResponseFor(request);
+
+            var clientAction = response.ClientAction;
+
+            clientAction?.AfterResponse(remoteBroker, request, response);
+
+            return clientAction?.GetNextRequest(remoteBroker);
         }
     }
 }

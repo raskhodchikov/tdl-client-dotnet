@@ -9,9 +9,7 @@ namespace TDL.Test.Specs
         private static readonly Dictionary<string, IClientAction> Actions =
             new Dictionary<string, IClientAction>
             {
-                ["publish"] = ClientActions.Publish,
-                ["stop"] = ClientActions.Stop,
-                ["publish and stop"] = ClientActions.PublishAndStop
+                ["publish"] = ClientActions.Publish
             };
 
         public static IClientAction Get(string action)
