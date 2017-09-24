@@ -52,6 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProcessingRules.Builder.cs">
+      <DependentUpon>ProcessingRules.cs</DependentUpon>
+    </Compile>
     <Compile Include="Serialization\RequestJson.cs" />
     <Compile Include="Actions\ClientActions.cs" />
     <Compile Include="Abstractions\Response\FatalErrorResponse.cs" />
@@ -59,12 +62,13 @@
     <Compile Include="Abstractions\ProcessingRule.cs" />
     <Compile Include="Actions\PublishAction.cs" />
     <Compile Include="Serialization\ResponseJson.cs" />
+    <Compile Include="TdlClient.Builder.cs">
+      <DependentUpon>TdlClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="Transport\RemoteBroker.cs" />
     <Compile Include="Abstractions\Request.cs" />
     <Compile Include="Abstractions\Response\IResponse.cs" />
     <Compile Include="Abstractions\Response\ValidResponse.cs" />
-    <Compile Include="ProcessingRules.Builder.cs" />
-    <Compile Include="TdlClient.Builder.cs" />
     <Compile Include="ProcessingRules.cs" />
     <Compile Include="TdlClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
