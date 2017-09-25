@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonTestBroker.cs" />
+    <Compile Include="SpecItems\OutputSpecItem.cs" />
     <Compile Include="SpecItems\PayloadSpecItem.cs" />
     <Compile Include="SpecItems\ProcessingRuleSpecItem.cs" />
     <Compile Include="Utils\Jmx\Broker\JolokiaResponses\JolokiaBrowseResponseValueItem.cs" />

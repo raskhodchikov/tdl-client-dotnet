@@ -17,7 +17,7 @@ namespace TDL.Test.Specs
         private const int Port = 21616;
         private const string UniqueId = "testuser@example.com";
 
-        private readonly IAuditStream auditStream = new LogAuditStream(new ConsoleAuditStream());
+        private readonly LogAuditStream auditStream = new LogAuditStream(new ConsoleAuditStream());
         private readonly RemoteJmxBroker broker = TestBroker.Instance;
 
         private RemoteJmxQueue requestQueue;
@@ -114,9 +114,15 @@ namespace TDL.Test.Specs
         [Then(@"the client should display to console:")]
         public void ThenTheClientShouldDisplayToConsole(Table table)
         {
-            ScenarioContext.Current.Pending();
+            var expectedOutputs = table.CreateSet<OutputSpecItem>().ToList();
+            var actualOutput = auditStream.GetLog();
+
+            expectedOutputs.ForEach(expectedLine =>
+            {
+                Assert.IsTrue(actualOutput.Contains(expectedLine.Output));
+            });
         }
-        
+
         [Then(@"I should get no exception")]
         public void ThenIShouldGetNoException()
         {
