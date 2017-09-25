@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using TDL.Client;
+using TDL.Client.Audit;
 using TDL.Test.Specs.SpecItems;
 using TDL.Test.Specs.Utils.Jmx.Broker;
+using TDL.Test.Specs.Utils.Logging;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 
@@ -15,6 +17,9 @@ namespace TDL.Test.Specs
         private const int Port = 21616;
         private const string UniqueId = "testuser@example.com";
 
+        private readonly LogAuditStream auditStream = new LogAuditStream(new ConsoleAuditStream());
+        private readonly RemoteJmxBroker broker = TestBroker.Instance;
+
         private RemoteJmxQueue requestQueue;
         private RemoteJmxQueue responseQueue;
         private TdlClient client;
@@ -24,17 +29,31 @@ namespace TDL.Test.Specs
         [Given(@"I start with a clean broker")]
         public void GivenIStartWithACleanBroker()
         {
-            requestQueue = TestBroker.Instance.AddQueue($"{UniqueId}.req");
+            requestQueue = broker.AddQueue($"{UniqueId}.req");
             requestQueue.Purge();
 
-            responseQueue = TestBroker.Instance.AddQueue($"{UniqueId}.resp");
+            responseQueue = broker.AddQueue($"{UniqueId}.resp");
             responseQueue.Purge();
 
+            auditStream.ClearLog();
             client = TdlClient.Build()
                 .SetHostname(Hostname)
                 .SetPort(Port)
                 .SetUniqueId(UniqueId)
                 .SetTimeToWaitForRequests(5)
+                .SetAuditStream(auditStream)
+                .Create();
+        }
+
+        [Given(@"the broker is not available")]
+        public void GivenTheBrokerIsNotAvailable()
+        {
+            auditStream.ClearLog();
+            client = TdlClient.Build()
+                .SetHostname(Hostname + "1")
+                .SetPort(Port)
+                .SetUniqueId(UniqueId)
+                .SetAuditStream(auditStream)
                 .Create();
         }
 
@@ -45,12 +64,6 @@ namespace TDL.Test.Specs
 
             requests.ForEach(requestQueue.SendTextMessage);
             requestCount = requests.Count;
-        }
-
-        [Given(@"the broker is not available")]
-        public void GivenTheBrokerIsNotAvailable()
-        {
-            ScenarioContext.Current.Pending();
         }
 
         [When(@"I go live with the following processing rules:")]
@@ -108,13 +121,19 @@ namespace TDL.Test.Specs
         [Then(@"the client should display to console:")]
         public void ThenTheClientShouldDisplayToConsole(Table table)
         {
-            ScenarioContext.Current.Pending();
+            var expectedOutputs = table.CreateSet<OutputSpecItem>().ToList();
+            var actualOutput = auditStream.GetLog();
+
+            expectedOutputs.ForEach(expectedLine =>
+            {
+                Assert.IsTrue(actualOutput.Contains(expectedLine.Output));
+            });
         }
-        
+
         [Then(@"I should get no exception")]
         public void ThenIShouldGetNoException()
         {
-            ScenarioContext.Current.Pending();
+            // No exceptions.
         }
     }
 }

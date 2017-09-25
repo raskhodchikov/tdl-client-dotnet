@@ -12,7 +12,15 @@ namespace TDL.Test.Specs
                 ["add two numbers"] = args =>
                     args.Take(2).Sum(int.Parse),
                 ["increment number"] = args =>
-                    int.Parse(args[0]) + 1
+                    int.Parse(args[0]) + 1,
+                ["return null"] = args =>
+                    null,
+                ["throw exception"] = args =>
+                    throw new InvalidOperationException("faulty user code"),
+                ["echo the request"] = args =>
+                    args[0],
+                ["some logic"] = args =>
+                    "ok"
             };
 
         public static Func<string[], object> Get(string call)

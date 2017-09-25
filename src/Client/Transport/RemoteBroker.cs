@@ -1,13 +1,13 @@
 using System;
 using Apache.NMS;
-using Newtonsoft.Json;
 using TDL.Client.Abstractions;
 using TDL.Client.Abstractions.Response;
 using TDL.Client.Serialization;
+using TDL.Client.Utils;
 
 namespace TDL.Client.Transport
 {
-    public class RemoteBroker : IDisposable
+    public class RemoteBroker : IRemoteBroker
     {
         private readonly IConnection connection;
         private readonly ISession session;
@@ -38,25 +38,27 @@ namespace TDL.Client.Transport
             messageProducer.DeliveryMode = MsgDeliveryMode.NonPersistent;
         }
 
-        public Request Recieve()
+        public Maybe<Request> Receive()
         {
             var textMessage = (ITextMessage) messageConsumer.Receive(TimeSpan.FromSeconds(timeout));
             if (textMessage == null)
-                return null;
+            {
+                return Maybe<Request>.None;
+            }
 
-            var requestJson = JsonConvert.DeserializeObject<RequestJson>(textMessage.Text);
-
+            var requestJson = RequestJson.Deserialize(textMessage.Text);
             var request = requestJson.To();
+
             request.TextMessage = textMessage;
 
-            return request;
+            return Maybe<Request>.Some(request);
         }
 
         public void RespondTo(Request request, IResponse response)
         {
-            var responseSesialized = JsonConvert.SerializeObject(ResponseJson.From(response));
+            var serializedResponse = ResponseJson.Serialize(response);
 
-            var textMessage = session.CreateTextMessage(responseSesialized);
+            var textMessage = session.CreateTextMessage(serializedResponse);
             messageProducer.Send(textMessage);
 
             request.TextMessage.Acknowledge();

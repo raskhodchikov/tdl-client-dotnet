@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonTestBroker.cs" />
+    <Compile Include="SpecItems\OutputSpecItem.cs" />
     <Compile Include="SpecItems\PayloadSpecItem.cs" />
     <Compile Include="SpecItems\ProcessingRuleSpecItem.cs" />
     <Compile Include="Utils\Jmx\Broker\JolokiaResponses\JolokiaBrowseResponseValueItem.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Utils\Jmx\Broker\RemoteJmxBroker.cs" />
     <Compile Include="Utils\Jmx\Broker\RemoteJmxQueue.cs" />
     <Compile Include="Utils\Extensions\SpecFlowTableExtension.cs" />
+    <Compile Include="Utils\Logging\LogAuditStream.cs" />
     <Compile Include="Utils\MimeType.cs" />
   </ItemGroup>
   <ItemGroup>

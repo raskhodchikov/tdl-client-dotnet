@@ -1,4 +1,6 @@
-﻿namespace TDL.Client
+﻿using TDL.Client.Audit;
+
+namespace TDL.Client
 {
     public partial class TdlClient
     {
@@ -8,6 +10,13 @@
             private int port;
             private string uniqueId;
             private long timeToWaitForRequests;
+            private IAuditStream auditStream;
+
+            public Builder()
+            {
+                port = 61616;
+                timeToWaitForRequests = 1000;
+            }
 
             public Builder SetHostname(string hostname)
             {
@@ -33,7 +42,13 @@
                 return this;
             }
 
-            public TdlClient Create() => new TdlClient(hostname, port, uniqueId, timeToWaitForRequests);
+            public Builder SetAuditStream(IAuditStream auditStream)
+            {
+                this.auditStream = auditStream;
+                return this;
+            }
+
+            public TdlClient Create() => new TdlClient(hostname, port, uniqueId, timeToWaitForRequests, auditStream);
         }
     }
 }

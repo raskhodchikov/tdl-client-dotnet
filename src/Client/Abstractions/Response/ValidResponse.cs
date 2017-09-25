@@ -1,4 +1,5 @@
 using TDL.Client.Actions;
+using TDL.Client.Audit;
 
 namespace TDL.Client.Abstractions.Response
 {
@@ -19,5 +20,7 @@ namespace TDL.Client.Abstractions.Response
             Result = result;
             ClientAction = clientAction;
         }
+
+        public string AuditText => $"resp = {Result?.ToDisplayableString()}";
     }
 }

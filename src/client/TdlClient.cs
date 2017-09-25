@@ -1,5 +1,8 @@
-﻿using TDL.Client.Abstractions;
+﻿using System;
+using TDL.Client.Abstractions;
+using TDL.Client.Audit;
 using TDL.Client.Transport;
+using TDL.Client.Utils;
 
 namespace TDL.Client
 {
@@ -9,45 +12,67 @@ namespace TDL.Client
         private readonly int port;
         private readonly string uniqueId;
         private readonly long timeToWaitForRequests;
+        private readonly Audit audit;
 
         public TdlClient(
             string hostname,
             int port,
             string uniqueId,
-            long timeToWaitForRequests)
+            long timeToWaitForRequests,
+            IAuditStream auditStream)
         {
             this.hostname = hostname;
             this.port = port;
             this.uniqueId = uniqueId;
             this.timeToWaitForRequests = timeToWaitForRequests;
+            audit = new Audit(auditStream);
         }
 
         public static Builder Build() => new Builder();
 
         public void GoLiveWith(ProcessingRules processingRules)
         {
-            using (var remoteBroker = new RemoteBroker(hostname, port, uniqueId, timeToWaitForRequests))
+            audit.LogLine("Starting client");
+
+            try
             {
-                var request = remoteBroker.Recieve();
-                while (request != null)
+                using (var remoteBroker = new RemoteBroker(hostname, port, uniqueId, timeToWaitForRequests))
                 {
-                    request = ApplyProcessingRules(request, processingRules, remoteBroker);
+                    audit.LogLine("Waiting for requests");
+                    var request = remoteBroker.Receive();
+                    while (request.HasValue)
+                    {
+                        request = ApplyProcessingRules(request.Value, processingRules, remoteBroker);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                audit.LogException("There was a problem processing messages", ex);
+            }
+
+            audit.LogLine("Stopping client");
         }
 
-        private static Request ApplyProcessingRules(
+        private Maybe<Request> ApplyProcessingRules(
             Request request,
             ProcessingRules processingRules,
             RemoteBroker remoteBroker)
         {
+            audit.StartLine();
+            audit.Log(request);
+
             var response = processingRules.GetResponseFor(request);
+            audit.Log(response);
 
             var clientAction = response.ClientAction;
+            audit.Log(clientAction);
 
-            clientAction?.AfterResponse(remoteBroker, request, response);
+            audit.EndLine();
 
-            return clientAction?.GetNextRequest(remoteBroker);
+            clientAction.AfterResponse(remoteBroker, request, response);
+
+            return clientAction.GetNextRequest(remoteBroker);
         }
     }
 }

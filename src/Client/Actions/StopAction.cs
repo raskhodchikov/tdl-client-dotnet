@@ -5,15 +5,14 @@ using TDL.Client.Utils;
 
 namespace TDL.Client.Actions
 {
-    public class PublishAction : IClientAction
+    public class StopAction : IClientAction
     {
-        public string AuditText { get; } = string.Empty;
+        public string AuditText { get; } = "(NOT PUBLISHED)";
 
         public void AfterResponse(RemoteBroker remoteBroker, Request request, IResponse response)
         {
-            remoteBroker.RespondTo(request, response);
         }
 
-        public Maybe<Request> GetNextRequest(RemoteBroker remoteBroker) => remoteBroker.Receive();
+        public Maybe<Request> GetNextRequest(RemoteBroker remoteBroker) => Maybe<Request>.None;
     }
 }
