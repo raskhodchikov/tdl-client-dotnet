@@ -21,5 +21,17 @@ namespace TDL.Client.Serialization
                 Params = Params,
                 Id = Id
             };
+
+        public static RequestJson Deserialize(string value)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<RequestJson>(value);
+            }
+            catch (JsonReaderException ex)
+            {
+                throw new DeserializationException("Invalid message format", ex);
+            }
+        }
     }
 }

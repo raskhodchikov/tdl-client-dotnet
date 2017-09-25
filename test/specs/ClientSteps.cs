@@ -126,7 +126,7 @@ namespace TDL.Test.Specs
         [Then(@"I should get no exception")]
         public void ThenIShouldGetNoException()
         {
-            ScenarioContext.Current.Pending();
+            // No exceptions.
         }
     }
 }

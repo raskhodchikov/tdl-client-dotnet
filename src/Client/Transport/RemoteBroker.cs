@@ -1,6 +1,5 @@
 using System;
 using Apache.NMS;
-using Newtonsoft.Json;
 using TDL.Client.Abstractions;
 using TDL.Client.Abstractions.Response;
 using TDL.Client.Serialization;
@@ -47,7 +46,7 @@ namespace TDL.Client.Transport
                 return Maybe<Request>.None;
             }
 
-            var requestJson = JsonConvert.DeserializeObject<RequestJson>(textMessage.Text);
+            var requestJson = RequestJson.Deserialize(textMessage.Text);
             var request = requestJson.To();
 
             request.TextMessage = textMessage;
@@ -57,9 +56,9 @@ namespace TDL.Client.Transport
 
         public void RespondTo(Request request, IResponse response)
         {
-            var responseSesialized = JsonConvert.SerializeObject(ResponseJson.From(response));
+            var serializedResponse = ResponseJson.Serialize(response);
 
-            var textMessage = session.CreateTextMessage(responseSesialized);
+            var textMessage = session.CreateTextMessage(serializedResponse);
             messageProducer.Send(textMessage);
 
             request.TextMessage.Acknowledge();

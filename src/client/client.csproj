@@ -61,6 +61,7 @@
     <Compile Include="ProcessingRules.Builder.cs">
       <DependentUpon>ProcessingRules.cs</DependentUpon>
     </Compile>
+    <Compile Include="Serialization\DeserializationException.cs" />
     <Compile Include="Serialization\RequestJson.cs" />
     <Compile Include="Actions\ClientActions.cs" />
     <Compile Include="Abstractions\Response\FatalErrorResponse.cs" />

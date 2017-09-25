@@ -14,7 +14,10 @@ namespace TDL.Client.Serialization
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        public static ResponseJson From(IResponse response) =>
+        public static string Serialize(IResponse response) =>
+            JsonConvert.SerializeObject(From(response));
+
+        private static ResponseJson From(IResponse response) =>
             new ResponseJson
             {
                 Result = response.Result,
