@@ -23,7 +23,7 @@ namespace TDL.Client
         public IResponse GetResponseFor(Request request)
         {
             if (!rules.ContainsKey(request.MethodName))
-                return new FatalErrorResponse($"Method '{request.MethodName}' did not match any processing rule.");
+                return new FatalErrorResponse($"method '{request.MethodName}' did not match any processing rule");
 
             var processingRule = rules[request.MethodName];
 
@@ -32,9 +32,9 @@ namespace TDL.Client
                 var result = processingRule.UserImplementation(request.Params);
                 return new ValidResponse(request.Id, result, processingRule.ClientAction);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new FatalErrorResponse($"User implementation raised exception: {e.Message}");
+                return new FatalErrorResponse("user implementation raised exception");
             }
         }
     }
