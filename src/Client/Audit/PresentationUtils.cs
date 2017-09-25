@@ -34,10 +34,11 @@ namespace TDL.Client.Audit
 
         private static string SuppressExtraLines(string value)
         {
-            var parts = value.Split('\n');
-            var plural = parts.Length > 1 ? "s" : string.Empty;
+            var lines = value.Split('\n');
+            var suppressedLinesCount = lines.Length - 1;
+            var plural = suppressedLinesCount > 1 ? "s" : string.Empty;
 
-            return $"{parts[0]} .. ( more line{plural})";
+            return $"{lines[0]} .. ( {suppressedLinesCount} more line{plural} )";
         }
 
         private static string AddQuotes(string value) =>
