@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\PublishAndStopAction.cs" />
     <Compile Include="Actions\StopAction.cs" />
     <Compile Include="ProcessingRules.Builder.cs">
       <DependentUpon>ProcessingRules.cs</DependentUpon>
