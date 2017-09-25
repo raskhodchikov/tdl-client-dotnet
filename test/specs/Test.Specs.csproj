@@ -54,6 +54,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallImplementationFactory.cs" />
+    <Compile Include="ClientActionsFactory.cs" />
     <Compile Include="ClientSteps.cs" />
     <Compile Include="client\client.feature.cs">
       <AutoGen>True</AutoGen>
@@ -62,6 +64,8 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonTestBroker.cs" />
+    <Compile Include="SpecItems\PayloadSpecItem.cs" />
+    <Compile Include="SpecItems\ProcessingRuleSpecItem.cs" />
     <Compile Include="Utils\Jmx\Broker\JolokiaResponses\JolokiaBrowseResponseValueItem.cs" />
     <Compile Include="Utils\Jmx\Broker\JolokiaResponses\JolokiaResponse.cs" />
     <Compile Include="Utils\Jmx\Broker\JolokiaSession.cs" />
@@ -77,6 +81,12 @@
       <LastGenOutput>client.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Client\Client.csproj">
+      <Project>{2894deb8-9d78-4ec8-a7f3-1dd687f0819e}</Project>
+      <Name>Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

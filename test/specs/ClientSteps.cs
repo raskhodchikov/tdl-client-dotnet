@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using TDL.Test.Specs.Utils.Extensions;
+using TDL.Client;
+using TDL.Test.Specs.SpecItems;
 using TDL.Test.Specs.Utils.Jmx.Broker;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace TDL.Test.Specs
 {
@@ -10,11 +12,12 @@ namespace TDL.Test.Specs
     public class ClientSteps
     {
         private const string Hostname = "localhost";
-        private const int Port = 28161;
+        private const int Port = 21616;
         private const string UniqueId = "testuser@example.com";
 
         private RemoteJmxQueue requestQueue;
         private RemoteJmxQueue responseQueue;
+        private TdlClient client;
 
         private long requestCount;
 
@@ -26,12 +29,19 @@ namespace TDL.Test.Specs
 
             responseQueue = TestBroker.Instance.AddQueue($"{UniqueId}.resp");
             responseQueue.Purge();
+
+            client = TdlClient.Build()
+                .SetHostname(Hostname)
+                .SetPort(Port)
+                .SetUniqueId(UniqueId)
+                .SetTimeToWaitForRequests(5)
+                .Create();
         }
 
         [Given(@"I receive the following requests:")]
         public void GivenIReceiveTheFollowingRequests(Table table)
         {
-            var requests = table.ToList();
+            var requests = table.CreateSet<PayloadSpecItem>().Select(i => i.Payload).ToList();
 
             requests.ForEach(requestQueue.SendTextMessage);
             requestCount = requests.Count;
@@ -42,11 +52,20 @@ namespace TDL.Test.Specs
         {
             ScenarioContext.Current.Pending();
         }
-        
+
         [When(@"I go live with the following processing rules:")]
         public void WhenIGoLiveWithTheFollowingProcessingRules(Table table)
         {
-            ScenarioContext.Current.Pending();
+            var processingRuleSpecItems = table.CreateSet<ProcessingRuleSpecItem>().ToList();
+
+            var processingRules = new ProcessingRules();
+            processingRuleSpecItems.ForEach(ruleSpec =>
+                processingRules
+                    .On(ruleSpec.Method)
+                    .Call(CallImplementationFactory.Get(ruleSpec.Call))
+                    .Then(ClientActionsFactory.Get(ruleSpec.Action)));
+
+            client.GoLiveWith(processingRules);
         }
 
         [Then(@"the client should consume all requests")]
@@ -59,7 +78,7 @@ namespace TDL.Test.Specs
         [Then(@"the client should publish the following responses:")]
         public void ThenTheClientShouldPublishTheFollowingResponses(Table table)
         {
-            var expectedResponses = table.ToList();
+            var expectedResponses = table.CreateSet<PayloadSpecItem>().Select(i => i.Payload).ToList();
             var actualResponses = responseQueue.GetMessageContents();
             Assert.IsTrue(expectedResponses.SequenceEqual(actualResponses),
                 "The responses are not correct");
