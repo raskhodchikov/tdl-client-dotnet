@@ -1,6 +1,7 @@
 ﻿using TDL.Client.Abstractions;
 using TDL.Client.Abstractions.Response;
 using TDL.Client.Transport;
+using TDL.Client.Utils;
 
 namespace TDL.Client.Actions
 {
@@ -8,6 +9,6 @@ namespace TDL.Client.Actions
     {
         void AfterResponse(RemoteBroker remoteBroker, Request request, IResponse response);
 
-        Request GetNextRequest(RemoteBroker remoteBroker);
+        Maybe<Request> GetNextRequest(RemoteBroker remoteBroker);
     }
 }

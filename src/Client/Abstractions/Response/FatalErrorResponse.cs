@@ -8,7 +8,7 @@ namespace TDL.Client.Abstractions.Response
 
         public object Result { get; }
 
-        public IClientAction ClientAction => null;
+        public IClientAction ClientAction => ClientActions.Stop;
 
         public FatalErrorResponse(string message)
         {

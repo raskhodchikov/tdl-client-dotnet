@@ -1,5 +1,6 @@
 ﻿using TDL.Client.Abstractions;
 using TDL.Client.Transport;
+using TDL.Client.Utils;
 
 namespace TDL.Client
 {
@@ -29,14 +30,14 @@ namespace TDL.Client
             using (var remoteBroker = new RemoteBroker(hostname, port, uniqueId, timeToWaitForRequests))
             {
                 var request = remoteBroker.Recieve();
-                while (request != null)
+                while (request.HasValue)
                 {
-                    request = ApplyProcessingRules(request, processingRules, remoteBroker);
+                    request = ApplyProcessingRules(request.Value, processingRules, remoteBroker);
                 }
             }
         }
 
-        private static Request ApplyProcessingRules(
+        private static Maybe<Request> ApplyProcessingRules(
             Request request,
             ProcessingRules processingRules,
             RemoteBroker remoteBroker)
@@ -45,9 +46,9 @@ namespace TDL.Client
 
             var clientAction = response.ClientAction;
 
-            clientAction?.AfterResponse(remoteBroker, request, response);
+            clientAction.AfterResponse(remoteBroker, request, response);
 
-            return clientAction?.GetNextRequest(remoteBroker);
+            return clientAction.GetNextRequest(remoteBroker);
         }
     }
 }
