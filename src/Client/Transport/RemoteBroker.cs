@@ -38,7 +38,7 @@ namespace TDL.Client.Transport
             messageProducer.DeliveryMode = MsgDeliveryMode.NonPersistent;
         }
 
-        public Maybe<Request> Recieve()
+        public Maybe<Request> Receive()
         {
             var textMessage = (ITextMessage) messageConsumer.Receive(TimeSpan.FromSeconds(timeout));
             if (textMessage == null)

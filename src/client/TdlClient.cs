@@ -39,7 +39,7 @@ namespace TDL.Client
                 using (var remoteBroker = new RemoteBroker(hostname, port, uniqueId, timeToWaitForRequests))
                 {
                     audit.LogLine("Waiting for requests");
-                    var request = remoteBroker.Recieve();
+                    var request = remoteBroker.Receive();
                     while (request.HasValue)
                     {
                         request = ApplyProcessingRules(request.Value, processingRules, remoteBroker);

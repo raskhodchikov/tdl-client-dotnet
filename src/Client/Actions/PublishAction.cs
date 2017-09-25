@@ -14,6 +14,6 @@ namespace TDL.Client.Actions
             remoteBroker.RespondTo(request, response);
         }
 
-        public Maybe<Request> GetNextRequest(RemoteBroker remoteBroker) => remoteBroker.Recieve();
+        public Maybe<Request> GetNextRequest(RemoteBroker remoteBroker) => remoteBroker.Receive();
     }
 }

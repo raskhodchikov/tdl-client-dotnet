@@ -7,7 +7,7 @@ namespace TDL.Client.Transport
 {
     public interface IRemoteBroker : IDisposable
     {
-        Maybe<Request> Recieve();
+        Maybe<Request> Receive();
 
         void RespondTo(Request request, IResponse response);
     }
