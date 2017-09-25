@@ -1,8 +1,10 @@
+using System.Linq;
 using Apache.NMS;
+using TDL.Client.Audit;
 
 namespace TDL.Client.Abstractions
 {
-    public class Request
+    public class Request : IAuditable
     {
         public ITextMessage TextMessage { get; set; }
 
@@ -11,5 +13,8 @@ namespace TDL.Client.Abstractions
         public string[] Params { get; set; }
 
         public string Id { get; set; }
+
+        public string AuditText =>
+            $"id = {Id}, req = {MethodName}({Params.ToArray<object>().ToDisplayableString()})";
     }
 }

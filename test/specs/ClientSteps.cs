@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using TDL.Client;
+using TDL.Client.Audit;
 using TDL.Test.Specs.SpecItems;
 using TDL.Test.Specs.Utils.Jmx.Broker;
+using TDL.Test.Specs.Utils.Logging;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 
@@ -15,6 +17,9 @@ namespace TDL.Test.Specs
         private const int Port = 21616;
         private const string UniqueId = "testuser@example.com";
 
+        private readonly IAuditStream auditStream = new LogAuditStream(new ConsoleAuditStream());
+        private readonly RemoteJmxBroker broker = TestBroker.Instance;
+
         private RemoteJmxQueue requestQueue;
         private RemoteJmxQueue responseQueue;
         private TdlClient client;
@@ -24,10 +29,10 @@ namespace TDL.Test.Specs
         [Given(@"I start with a clean broker")]
         public void GivenIStartWithACleanBroker()
         {
-            requestQueue = TestBroker.Instance.AddQueue($"{UniqueId}.req");
+            requestQueue = broker.AddQueue($"{UniqueId}.req");
             requestQueue.Purge();
 
-            responseQueue = TestBroker.Instance.AddQueue($"{UniqueId}.resp");
+            responseQueue = broker.AddQueue($"{UniqueId}.resp");
             responseQueue.Purge();
 
             client = TdlClient.Build()
@@ -35,6 +40,7 @@ namespace TDL.Test.Specs
                 .SetPort(Port)
                 .SetUniqueId(UniqueId)
                 .SetTimeToWaitForRequests(5)
+                .SetAuditStream(auditStream)
                 .Create();
         }
 

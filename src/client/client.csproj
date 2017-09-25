@@ -54,6 +54,10 @@
   <ItemGroup>
     <Compile Include="Actions\PublishAndStopAction.cs" />
     <Compile Include="Actions\StopAction.cs" />
+    <Compile Include="Audit\ConsoleAuditStream.cs" />
+    <Compile Include="Audit\IAuditable.cs" />
+    <Compile Include="Audit\IAuditStream.cs" />
+    <Compile Include="Audit\PresentationUtils.cs" />
     <Compile Include="ProcessingRules.Builder.cs">
       <DependentUpon>ProcessingRules.cs</DependentUpon>
     </Compile>
@@ -64,6 +68,9 @@
     <Compile Include="Abstractions\ProcessingRule.cs" />
     <Compile Include="Actions\PublishAction.cs" />
     <Compile Include="Serialization\ResponseJson.cs" />
+    <Compile Include="TdlClient.Audit.cs">
+      <DependentUpon>TdlClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="TdlClient.Builder.cs">
       <DependentUpon>TdlClient.cs</DependentUpon>
     </Compile>

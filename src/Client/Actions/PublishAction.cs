@@ -7,6 +7,8 @@ namespace TDL.Client.Actions
 {
     public class PublishAction : IClientAction
     {
+        public string AuditText { get; } = string.Empty;
+
         public void AfterResponse(RemoteBroker remoteBroker, Request request, IResponse response)
         {
             remoteBroker.RespondTo(request, response);

@@ -7,6 +7,8 @@ namespace TDL.Client.Actions
 {
     public class PublishAndStopAction : IClientAction
     {
+        public string AuditText { get; } = "(NOT PUBLISHED)";
+
         public void AfterResponse(RemoteBroker remoteBroker, Request request, IResponse response)
         {
             remoteBroker.RespondTo(request, response);

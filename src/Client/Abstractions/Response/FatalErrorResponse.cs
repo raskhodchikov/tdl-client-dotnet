@@ -14,5 +14,7 @@ namespace TDL.Client.Abstractions.Response
         {
             Result = message;
         }
+
+        public string AuditText => $@"{Id} = ""{Result}""";
     }
 }

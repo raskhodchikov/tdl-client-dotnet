@@ -72,6 +72,7 @@
     <Compile Include="Utils\Jmx\Broker\RemoteJmxBroker.cs" />
     <Compile Include="Utils\Jmx\Broker\RemoteJmxQueue.cs" />
     <Compile Include="Utils\Extensions\SpecFlowTableExtension.cs" />
+    <Compile Include="Utils\Logging\LogAuditStream.cs" />
     <Compile Include="Utils\MimeType.cs" />
   </ItemGroup>
   <ItemGroup>
