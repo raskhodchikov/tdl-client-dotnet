@@ -35,11 +35,24 @@ namespace TDL.Test.Specs
             responseQueue = broker.AddQueue($"{UniqueId}.resp");
             responseQueue.Purge();
 
+            auditStream.ClearLog();
             client = TdlClient.Build()
                 .SetHostname(Hostname)
                 .SetPort(Port)
                 .SetUniqueId(UniqueId)
                 .SetTimeToWaitForRequests(5)
+                .SetAuditStream(auditStream)
+                .Create();
+        }
+
+        [Given(@"the broker is not available")]
+        public void GivenTheBrokerIsNotAvailable()
+        {
+            auditStream.ClearLog();
+            client = TdlClient.Build()
+                .SetHostname(Hostname + "1")
+                .SetPort(Port)
+                .SetUniqueId(UniqueId)
                 .SetAuditStream(auditStream)
                 .Create();
         }
@@ -51,12 +64,6 @@ namespace TDL.Test.Specs
 
             requests.ForEach(requestQueue.SendTextMessage);
             requestCount = requests.Count;
-        }
-
-        [Given(@"the broker is not available")]
-        public void GivenTheBrokerIsNotAvailable()
-        {
-            ScenarioContext.Current.Pending();
         }
 
         [When(@"I go live with the following processing rules:")]

@@ -21,6 +21,6 @@ namespace TDL.Client.Abstractions.Response
             ClientAction = clientAction;
         }
 
-        public string AuditText => $"resp = {Result.ToDisplayableString()}";
+        public string AuditText => $"resp = {Result?.ToDisplayableString()}";
     }
 }
