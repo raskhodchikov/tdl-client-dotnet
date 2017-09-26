@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Julian Ghionoiu</authors>
+    <owners>Julian Ghionoiu</owners>
+    <licenseUrl>https://github.com/julianghionoiu/tdl-client-dotnet/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/julianghionoiu/tdl-client-dotnet</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ActiveMq client</description>
+    <dependencies>
+      <dependency id="Apache.NMS" version="1.7.1" />
+      <dependency id="Apache.NMS.ActiveMQ" version="1.7.2" />
+      <dependency id="Newtonsoft.Json" version="9.0.1" />
+      <dependency id="RestSharp" version="105.2.3" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\TDL.Client.*" target="lib\net45" />
+  </files>
+</package>
