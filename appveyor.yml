@@ -28,10 +28,7 @@ build:
 
 deploy_script:
   - appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe  
-  - ps: |
-    if ($env:APPVEYOR_REPO_TAG -eq "true") {
-        ($artifacts.values | Where-Object {($_.path -like '*.nupkg') -and  !($_.path -like '*.symbols.nupkg')}) | foreach-object {nuget.exe push $_.path -Source https://www.nuget.org/api/v2/package -ApiKey $env:api_key; if ($lastexitcode -ne 0) {throw}}
-    }
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {($artifacts.values | Where-Object {($_.path -like '*.nupkg') -and  !($_.path -like '*.symbols.nupkg')}) | foreach-object {nuget.exe push $_.path -Source https://www.nuget.org/api/v2/package -ApiKey $env:api_key; if ($lastexitcode -ne 0) {throw}}    }
 
 # Use this instead of deploy_script when appveyor fixes it.
 #deploy:
