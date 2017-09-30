@@ -4,10 +4,14 @@ configuration: Release
 environment:
   sourceFolder: src
   projectName: Client
+  solutionName: tdl.sln
   api_key:
     secure: ZewpmA+rJPVO5I9JfzSNV4h7B1Qk6tL+udqkmlRQbtUAvSXtj+XGCFFTs9fv4hkP
   packageName: TDL.Client
 
+install:
+- cmd: git submodule update --init --recursive
+  
 before_build:
 - ps: >-
     nuget restore
@@ -21,14 +25,20 @@ before_build:
     }
 
 build:
-  project: $(sourceFolder)\$(projectName)\$(projectName).csproj
+  project: $(solutionName)
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: minimal
 
+before_test:
+- ps: >-
+    cd broker
+
+    .\activemq-wrapper.ps1
+
 deploy_script:
   - appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe  
-  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {($artifacts.values | Where-Object {($_.path -like '*.nupkg') -and  !($_.path -like '*.symbols.nupkg')}) | foreach-object {nuget.exe push $_.path -Source https://www.nuget.org/api/v2/package -ApiKey $env:api_key; if ($lastexitcode -ne 0) {throw}}    }
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $end:APPVEYOR_REPO_TAG_NAME.StartsWith("v0.")) {($artifacts.values | Where-Object {($_.path -like '*.nupkg') -and  !($_.path -like '*.symbols.nupkg')}) | foreach-object {nuget.exe push $_.path -Source https://www.nuget.org/api/v2/package -ApiKey $env:api_key; if ($lastexitcode -ne 0) {throw}}    }
 
 # Use this instead of deploy_script when appveyor fixes it.
 #deploy:
