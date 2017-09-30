@@ -5,7 +5,7 @@ environment:
   sourceFolder: src
   projectName: Client
   api_key:
-    secure: ZewpmA+rJPVO5I9JfzSNV4h7B1Qk6tL+udqkmlRQbtUAvSXtj+XGCFFTs9fv4hkP
+    secure: n99aLyTg0+72IVcTor23VDwAXAEsKVPg3kxSod2kI4aVEY7AMtHVy1IJdmX/Zy85
   packageName: TDL.Client
 
 before_build:
