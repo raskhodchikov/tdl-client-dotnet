@@ -64,12 +64,12 @@
     <Compile Include="Utils\Extensions\SpecFlowTableExtension.cs" />
     <Compile Include="Utils\Logging\LogAuditStream.cs" />
     <Compile Include="Utils\MimeType.cs" />
-    <Compile Include="client\*.feature.cs"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="client\*.feature" />
+    <!-- Include all feature files from the specs folder. -->
+    <None Include="client\**\*.feature" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Client\Client.csproj">
@@ -80,6 +80,12 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\SpecFlow.2.2.1\tools\TechTalk.SpecFlow.targets" Condition="Exists('..\..\packages\SpecFlow.2.2.1\tools\TechTalk.SpecFlow.targets')" />
+  <Target Name="AfterUpdateFeatureFilesInProject">
+    <!-- Include any files that specflow generated into the compilation of the project. -->
+    <ItemGroup>
+      <Compile Include="@(SpecFlowGeneratedFiles)" />
+    </ItemGroup>
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
