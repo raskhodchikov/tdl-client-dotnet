@@ -45,6 +45,7 @@ if ($answer -eq "y")
 	$releaseProperties.Save((Resolve-Path $releasePropertiesPath).Path)
 	
 	git stage $releasePropertiesPath
+	git commit -m"Update release version to $($newVersion)"
 	git tag -a "v$($newVersion)" -m "Release $($newVersion)"
 	git push origin "v$($newVersion)"
 	
