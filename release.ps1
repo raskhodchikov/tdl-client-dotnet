@@ -46,6 +46,7 @@ if ($answer -eq "y")
 	
 	git stage $releasePropertiesPath
 	git commit -m"Update release version to $($newVersion)"
+	git push
 	git tag -a "v$($newVersion)" -m "Release $($newVersion)"
 	git push origin "v$($newVersion)"
 	
