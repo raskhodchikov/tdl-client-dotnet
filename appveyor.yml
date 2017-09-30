@@ -16,7 +16,7 @@ before_build:
 - ps: >-
     nuget restore
 
-    if ($env:APPVEYOR_REPO_TAG -eq "true") {
+    if ($env:APPVEYOR_REPO_TAG -eq "true" -and $end:APPVEYOR_REPO_TAG_NAME.StartsWith("v0.")) {
       # Patch NuGet package version into .nuspec file
       $nuspecPath = "$env:APPVEYOR_BUILD_FOLDER\$env:sourceFolder\$env:projectName\$env:projectName.nuspec"
       $nuspec = [xml](Get-Content $nuspecPath)
