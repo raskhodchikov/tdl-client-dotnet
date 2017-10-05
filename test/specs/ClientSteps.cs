@@ -40,7 +40,7 @@ namespace TDL.Test.Specs
                 .SetHostname(Hostname)
                 .SetPort(Port)
                 .SetUniqueId(UniqueId)
-                .SetTimeToWaitForRequests(5)
+                .SetTimeToWaitForRequests(100)
                 .SetAuditStream(auditStream)
                 .Create();
         }
