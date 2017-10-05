@@ -40,7 +40,7 @@ namespace TDL.Client.Transport
 
         public Maybe<Request> Receive()
         {
-            var textMessage = (ITextMessage) messageConsumer.Receive(TimeSpan.FromSeconds(timeout));
+            var textMessage = (ITextMessage) messageConsumer.Receive(TimeSpan.FromMilliseconds(timeout));
             if (textMessage == null)
             {
                 return Maybe<Request>.None;
