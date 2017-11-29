@@ -9,10 +9,13 @@ namespace TDL.Test.Specs.Utils.Jmx.Broker
         private readonly JolokiaSession jolokiaSession;
         private readonly string queueBean;
 
+        public string Name { get; private set; }
+
         public RemoteJmxQueue(JolokiaSession jolokiaSession, string brokerName, string queueName)
         {
             this.jolokiaSession = jolokiaSession;
             queueBean = $"org.apache.activemq:type=Broker,brokerName={brokerName},destinationType=Queue,destinationName={queueName}";
+            Name = queueName;
         }
 
         public void SendTextMessage(string message)

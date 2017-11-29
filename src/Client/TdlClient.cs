@@ -11,8 +11,9 @@ namespace TDL.Client
         private readonly string hostname;
         private readonly int port;
         private readonly string uniqueId;
-        private readonly long timeToWaitForRequests;
         private readonly Audit audit;
+
+        public long TimeToWaitForRequests { get; private set; }
 
         public TdlClient(
             string hostname,
@@ -24,8 +25,9 @@ namespace TDL.Client
             this.hostname = hostname;
             this.port = port;
             this.uniqueId = uniqueId;
-            this.timeToWaitForRequests = timeToWaitForRequests;
             audit = new Audit(auditStream);
+
+            TimeToWaitForRequests = timeToWaitForRequests;
         }
 
         public static Builder Build() => new Builder();
@@ -36,7 +38,7 @@ namespace TDL.Client
 
             try
             {
-                using (var remoteBroker = new RemoteBroker(hostname, port, uniqueId, timeToWaitForRequests))
+                using (var remoteBroker = new RemoteBroker(hostname, port, uniqueId, TimeToWaitForRequests))
                 {
                     audit.LogLine("Waiting for requests");
                     var request = remoteBroker.Receive();

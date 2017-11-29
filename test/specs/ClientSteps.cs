@@ -7,6 +7,7 @@ using TDL.Test.Specs.Utils.Jmx.Broker;
 using TDL.Test.Specs.Utils.Logging;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using System.Diagnostics;
 
 namespace TDL.Test.Specs
 {
@@ -15,7 +16,6 @@ namespace TDL.Test.Specs
     {
         private const string Hostname = "localhost";
         private const int Port = 21616;
-        private const string UniqueId = "testuser@example.com";
 
         private readonly LogAuditStream auditStream = new LogAuditStream(new ConsoleAuditStream());
         private readonly RemoteJmxBroker broker = TestBroker.Instance;
@@ -25,34 +25,34 @@ namespace TDL.Test.Specs
         private TdlClient client;
 
         private long requestCount;
+        private long processingTimeMillis = 0;
 
-        [Given(@"I start with a clean broker")]
-        public void GivenIStartWithACleanBroker()
+        [Given(@"^I start with a clean broker and a client for user ""([^""]*)""$")]
+        public void GivenIStartWithACleanBroker(string username)
         {
-            requestQueue = broker.AddQueue($"{UniqueId}.req");
+            requestQueue = broker.AddQueue($"{username}.req");
             requestQueue.Purge();
 
-            responseQueue = broker.AddQueue($"{UniqueId}.resp");
+            responseQueue = broker.AddQueue($"{username}.resp");
             responseQueue.Purge();
 
             auditStream.ClearLog();
             client = TdlClient.Build()
                 .SetHostname(Hostname)
                 .SetPort(Port)
-                .SetUniqueId(UniqueId)
-                .SetTimeToWaitForRequests(100)
+                .SetUniqueId(username)
                 .SetAuditStream(auditStream)
                 .Create();
         }
 
-        [Given(@"the broker is not available")]
+        [Given(@"^the broker is not available$")]
         public void GivenTheBrokerIsNotAvailable()
         {
             auditStream.ClearLog();
             client = TdlClient.Build()
                 .SetHostname(Hostname + "1")
                 .SetPort(Port)
-                .SetUniqueId(UniqueId)
+                .SetUniqueId("X")
                 .SetAuditStream(auditStream)
                 .Create();
         }
@@ -61,6 +61,18 @@ namespace TDL.Test.Specs
         public void GivenIReceiveTheFollowingRequests(Table table)
         {
             var requests = table.CreateSet<PayloadSpecItem>().Select(i => i.Payload).ToList();
+
+            requests.ForEach(requestQueue.SendTextMessage);
+            requestCount = requests.Count;
+        }
+
+        [Given(@"^I receive (\d+) identical requests like:$")]
+        public void SentIdenticalRequests(int number, Table table)
+        {
+            var requests = Enumerable
+                .Repeat(table.CreateSet<PayloadSpecItem>().Select(p => p.Payload), number)
+                .SelectMany(p => p)
+                .ToList();
 
             requests.ForEach(requestQueue.SendTextMessage);
             requestCount = requests.Count;
@@ -78,7 +90,33 @@ namespace TDL.Test.Specs
                     .Call(CallImplementationFactory.Get(ruleSpec.Call))
                     .Then(ClientActionsFactory.Get(ruleSpec.Action)));
 
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             client.GoLiveWith(processingRules);
+            stopwatch.Stop();
+
+            processingTimeMillis = stopwatch.ElapsedMilliseconds;
+        }
+
+        [Then(@"^the time to wait for requests is (\d+)ms$")]
+        public void ThenTheTimeToWaitForRequestsIs(int expectedTimeout)
+        {
+            Assert.AreEqual(expectedTimeout, client.TimeToWaitForRequests,
+                "The client request timeout has a different value.");
+        }
+
+        [Then(@"^the request queue is ""([^""]*)""$")]
+        public void ThenTheRequestQueueIs(string expectedName)
+        {
+            Assert.AreEqual(expectedName, requestQueue.Name,
+                "Request queue has a different value.");
+        }
+
+        [Then(@"^the response queue is ""([^""]*)""$")]
+        public void ThenTheResponseQueyeIs(string expectedName)
+        {
+            Assert.AreEqual(expectedName, responseQueue.Name,
+                "Response queue has a different value.");
         }
 
         [Then(@"the client should consume all requests")]
@@ -134,6 +172,12 @@ namespace TDL.Test.Specs
         public void ThenIShouldGetNoException()
         {
             // No exceptions.
+        }
+
+        [Then(@"^the processing time should be lower than (\d+)ms$")]
+        public void ProccessingTimeShouldBeLowerThanMs(long threshold)
+        {
+            Assert.Less(processingTimeMillis, threshold);
         }
     }
 }
