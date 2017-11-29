@@ -174,11 +174,6 @@ namespace TDL.Test.Specs
             // No exceptions.
         }
 
-        /*
-         @And("^the processing time should be lower than (\\d+)ms$")
-    public void processingTimeShouldBeLowerThanMs(long threshold) throws Throwable {
-        assertThat(processingTimeMillis, lessThan(threshold));
-    }*/
         [Then(@"^the processing time should be lower than (\d+)ms$")]
         public void ProccessingTimeShouldBeLowerThanMs(long threshold)
         {
