@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace TDL.Test.Specs
 {
@@ -20,7 +21,19 @@ namespace TDL.Test.Specs
                 ["echo the request"] = args =>
                     args[0],
                 ["some logic"] = args =>
-                    "ok"
+                    "ok",
+                ["work for 600ms"] = args =>
+                {
+                    try
+                    {
+                        Thread.Sleep(600);
+                    }
+                    catch (ThreadInterruptedException ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                    return "OK";
+                }
             };
 
         public static Func<string[], object> Get(string call)

@@ -15,7 +15,7 @@ namespace TDL.Client
             public Builder()
             {
                 port = 61616;
-                timeToWaitForRequests = 1000;
+                timeToWaitForRequests = 500;
             }
 
             public Builder SetHostname(string hostname)
