@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,11 +86,24 @@
     <Compile Include="Queue\ProcessingRules.cs" />
     <Compile Include="Queue\QueueBasedImplementationRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runner\ChallengeServerClient.cs" />
+    <Compile Include="Runner\ChallengeSessionConfig.cs" />
+    <Compile Include="Runner\ClientErrorException.cs" />
+    <Compile Include="Runner\Exceptions\RecordingSystemNotReachable.cs" />
+    <Compile Include="Runner\IActionProvider.cs" />
+    <Compile Include="Runner\IRoundChangesListener.cs" />
+    <Compile Include="Runner\OtherCommunicationException.cs" />
+    <Compile Include="Runner\RecordingSystem.cs" />
+    <Compile Include="Runner\RoundManagement.cs" />
+    <Compile Include="Runner\RunnerAction.cs" />
+    <Compile Include="Runner\ServerErrorException.cs" />
     <Compile Include="Utils\Maybe.cs" />
+    <Compile Include="Utils\PathHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Client.nuspec" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
