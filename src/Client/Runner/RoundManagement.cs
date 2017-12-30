@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using TDL.Client.Audit;
 using TDL.Client.Utils;
 
 namespace TDL.Client.Runner
@@ -17,7 +18,7 @@ namespace TDL.Client.Runner
             LastFetchedRoundPath = Path.Combine(ChallengesPath, "XR.txt");
         }
 
-        public static void SaveDescription(string rawDescription, Action<string> callback)
+        public static void SaveDescription(IRoundChangesListener listener, string rawDescription, IAuditStream auditStream)
         {
             // DEBT - the first line of the response is the ID for the round, the rest of the responseMessage is the description
             var newlineIndex = rawDescription.IndexOf('\n');
@@ -27,19 +28,19 @@ namespace TDL.Client.Runner
             var lastFetchedRound = GetLastFetchedRound();
             if (!roundId.Equals(lastFetchedRound))
             {
-                callback.Invoke(roundId);
+                listener.OnNewRound(roundId, RunnerAction.GetNewRoundDescription.ShortName);
             }
-            SaveDescription(roundId, rawDescription);
+            SaveDescription(roundId, rawDescription, auditStream);
         }
 
-        public static string SaveDescription(string label, string description)
+        public static string SaveDescription(string label, string description, IAuditStream auditStream)
         {
             // Save description.
             var descriptionPath = Path.Combine(ChallengesPath, $"{label}.txt");
 
             File.WriteAllText(descriptionPath, description.Replace("\n", Environment.NewLine));
             var relativePath = descriptionPath.Replace(PathHelper.RepositoryPath + Path.DirectorySeparatorChar, "");
-            Console.WriteLine($"Challenge description saved to file: {relativePath}.");
+            auditStream.WriteLine($"Challenge description saved to file: {relativePath}.");
 
             // Save round label.
             File.WriteAllText(LastFetchedRoundPath, label);

@@ -87,6 +87,7 @@
     <Compile Include="Queue\QueueBasedImplementationRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner\ChallengeServerClient.cs" />
+    <Compile Include="Runner\ChallengeSession.cs" />
     <Compile Include="Runner\ChallengeSessionConfig.cs" />
     <Compile Include="Runner\ClientErrorException.cs" />
     <Compile Include="Runner\Exceptions\RecordingSystemNotReachable.cs" />

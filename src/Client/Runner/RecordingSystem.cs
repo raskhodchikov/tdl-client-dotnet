@@ -74,5 +74,10 @@ namespace TDL.Client.Runner
         {
             NotifyEvent(roundId, shortName);
         }
+
+        public void DeployNotifyEvent(string lastFetchedRound)
+        {
+            NotifyEvent(lastFetchedRound, RunnerAction.DeployToProduction.ShortName);
+        }
     }
 }

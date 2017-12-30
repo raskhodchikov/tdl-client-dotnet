@@ -10,11 +10,11 @@ namespace TDL.Client.Runner
         private readonly string acceptHeader;
         private readonly RestClient restClient;
 
-        public ChallengeServerClient(string hostname, string journeyId, bool useColours)
+        public ChallengeServerClient(string hostname, int port, string journeyId, bool useColours)
         {
             this.journeyId = journeyId;
             this.acceptHeader = useColours ? "text/coloured" : "text/not-coloured";
-            this.restClient = new RestClient($"http://{hostname}:8222");
+            this.restClient = new RestClient($"http://{hostname}:{port}");
         }
 
 
