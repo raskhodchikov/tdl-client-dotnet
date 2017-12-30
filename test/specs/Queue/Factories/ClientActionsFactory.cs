@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TDL.Client.Queue.Actions;
 
-namespace TDL.Test.Specs
+namespace TDL.Test.Specs.Queue.Factories
 {
     internal class ClientActionsFactory
     {

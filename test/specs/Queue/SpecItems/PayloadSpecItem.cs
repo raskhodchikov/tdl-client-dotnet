@@ -1,4 +1,4 @@
-﻿namespace TDL.Test.Specs.SpecItems
+﻿namespace TDL.Test.Specs.Queue.SpecItems
 {
     internal class PayloadSpecItem
     {

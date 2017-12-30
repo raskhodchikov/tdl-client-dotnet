@@ -1,16 +1,17 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using NUnit.Framework;
+using TDL.Client;
 using TDL.Client.Audit;
-using TDL.Test.Specs.SpecItems;
+using TDL.Client.Queue;
+using TDL.Test.Specs.Queue.Factories;
+using TDL.Test.Specs.Queue.SpecItems;
 using TDL.Test.Specs.Utils.Jmx.Broker;
 using TDL.Test.Specs.Utils.Logging;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using System.Diagnostics;
-using TDL.Client;
-using TDL.Client.Queue;
 
-namespace TDL.Test.Specs
+namespace TDL.Test.Specs.Queue
 {
     [Binding]
     public class QueueSteps
