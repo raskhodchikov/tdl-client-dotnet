@@ -58,6 +58,8 @@
     <Compile Include="Audit\IAuditable.cs" />
     <Compile Include="Audit\IAuditStream.cs" />
     <Compile Include="Audit\PresentationUtils.cs" />
+    <Compile Include="Queue\IImplementationRunner.cs" />
+    <Compile Include="Queue\ImplementationRunnerBuilder.cs" />
     <Compile Include="Queue\ProcessingRules.Builder.cs">
       <DependentUpon>ProcessingRules.cs</DependentUpon>
     </Compile>
@@ -69,11 +71,11 @@
     <Compile Include="Queue\Abstractions\ProcessingRule.cs" />
     <Compile Include="Queue\Actions\PublishAction.cs" />
     <Compile Include="Queue\Serialization\ResponseJson.cs" />
-    <Compile Include="TdlClient.Audit.cs">
-      <DependentUpon>TdlClient.cs</DependentUpon>
+    <Compile Include="Queue\QueueBasedImplementationRunner.Audit.cs">
+      <DependentUpon>QueueBasedImplementationRunner.cs</DependentUpon>
     </Compile>
-    <Compile Include="TdlClient.Builder.cs">
-      <DependentUpon>TdlClient.cs</DependentUpon>
+    <Compile Include="Queue\QueueBasedImplementationRunner.Builder.cs">
+      <DependentUpon>QueueBasedImplementationRunner.cs</DependentUpon>
     </Compile>
     <Compile Include="Queue\Transport\IRemoteBroker.cs" />
     <Compile Include="Queue\Transport\RemoteBroker.cs" />
@@ -81,7 +83,7 @@
     <Compile Include="Queue\Abstractions\Response\IResponse.cs" />
     <Compile Include="Queue\Abstractions\Response\ValidResponse.cs" />
     <Compile Include="Queue\ProcessingRules.cs" />
-    <Compile Include="TdlClient.cs" />
+    <Compile Include="Queue\QueueBasedImplementationRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Maybe.cs" />
   </ItemGroup>

@@ -1,5 +1,4 @@
 ﻿using System;
-using TDL.Client.Audit;
 using TDL.Client.Queue;
 using TDL.Client.Queue.Abstractions;
 using TDL.Client.Queue.Transport;
@@ -7,45 +6,41 @@ using TDL.Client.Utils;
 
 namespace TDL.Client
 {
-    public partial class TdlClient
+    public partial class QueueBasedImplementationRunner
     {
-        private readonly string hostname;
-        private readonly int port;
-        private readonly string uniqueId;
         private readonly Audit audit;
+        private readonly ProcessingRules deployProcessingRules;
+        private readonly ImplementationRunnerConfig config;
 
-        public long TimeToWaitForRequests { get; private set; }
-
-        public TdlClient(
-            string hostname,
-            int port,
-            string uniqueId,
-            long timeToWaitForRequests,
-            IAuditStream auditStream)
+        public QueueBasedImplementationRunner(
+            ImplementationRunnerConfig config,
+            ProcessingRules deployProcessingRules)
         {
-            this.hostname = hostname;
-            this.port = port;
-            this.uniqueId = uniqueId;
-            audit = new Audit(auditStream);
+            this.config = config;
+            this.deployProcessingRules = deployProcessingRules;
 
-            TimeToWaitForRequests = timeToWaitForRequests;
+            audit = new Audit(config.AuditStream);
         }
 
-        public static Builder Build() => new Builder();
+        public long RequestTimeoutMilliseconds => config.RequestTimeoutMilliseconds;
 
-        public void GoLiveWith(ProcessingRules processingRules)
+        public void Run()
         {
             audit.LogLine("Starting client");
 
             try
             {
-                using (var remoteBroker = new RemoteBroker(hostname, port, uniqueId, TimeToWaitForRequests))
+                using (var remoteBroker = new RemoteBroker(
+                    config.Hostname,
+                    config.Port,
+                    config.UniqueId,
+                    config.RequestTimeoutMilliseconds))
                 {
                     audit.LogLine("Waiting for requests");
                     var request = remoteBroker.Receive();
                     while (request.HasValue)
                     {
-                        request = ApplyProcessingRules(request.Value, processingRules, remoteBroker);
+                        request = ApplyProcessingRules(request.Value, deployProcessingRules, remoteBroker);
                     }
                 }
             }

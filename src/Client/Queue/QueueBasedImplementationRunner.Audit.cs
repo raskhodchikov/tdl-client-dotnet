@@ -4,7 +4,7 @@ using TDL.Client.Audit;
 
 namespace TDL.Client
 {
-    public partial class TdlClient
+    public partial class QueueBasedImplementationRunner
     {
         private class Audit
         {
