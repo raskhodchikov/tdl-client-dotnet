@@ -1,4 +1,4 @@
-﻿namespace TDL.Client.Actions
+﻿namespace TDL.Client.Queue.Actions
 {
     public static class ClientActions
     {

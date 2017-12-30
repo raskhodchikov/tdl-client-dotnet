@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using TDL.Client.Abstractions;
-using TDL.Client.Abstractions.Response;
-using TDL.Client.Actions;
+using TDL.Client.Queue.Abstractions;
+using TDL.Client.Queue.Abstractions.Response;
+using TDL.Client.Queue.Actions;
 
-namespace TDL.Client
+namespace TDL.Client.Queue
 {
     public partial class ProcessingRules
     {

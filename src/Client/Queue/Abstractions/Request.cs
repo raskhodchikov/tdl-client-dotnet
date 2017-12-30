@@ -2,7 +2,7 @@ using System.Linq;
 using Apache.NMS;
 using TDL.Client.Audit;
 
-namespace TDL.Client.Abstractions
+namespace TDL.Client.Queue.Abstractions
 {
     public class Request : IAuditable
     {

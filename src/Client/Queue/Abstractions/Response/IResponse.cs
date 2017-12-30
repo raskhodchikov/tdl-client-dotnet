@@ -1,7 +1,7 @@
-using TDL.Client.Actions;
+using TDL.Client.Queue.Actions;
 using TDL.Client.Audit;
 
-namespace TDL.Client.Abstractions.Response
+namespace TDL.Client.Queue.Abstractions.Response
 {
     public interface IResponse : IAuditable
     {

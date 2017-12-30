@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using TDL.Client.Abstractions;
+using TDL.Client.Queue.Abstractions;
 
-namespace TDL.Client.Serialization
+namespace TDL.Client.Queue.Serialization
 {
     public class RequestJson
     {

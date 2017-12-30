@@ -1,7 +1,7 @@
 ﻿using System;
-using TDL.Client.Actions;
+using TDL.Client.Queue.Actions;
 
-namespace TDL.Client.Abstractions
+namespace TDL.Client.Queue.Abstractions
 {
     public class ProcessingRule
     {

@@ -1,7 +1,8 @@
 ﻿using System;
-using TDL.Client.Abstractions;
 using TDL.Client.Audit;
-using TDL.Client.Transport;
+using TDL.Client.Queue;
+using TDL.Client.Queue.Abstractions;
+using TDL.Client.Queue.Transport;
 using TDL.Client.Utils;
 
 namespace TDL.Client

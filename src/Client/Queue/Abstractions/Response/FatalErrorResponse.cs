@@ -1,6 +1,6 @@
-using TDL.Client.Actions;
+using TDL.Client.Queue.Actions;
 
-namespace TDL.Client.Abstractions.Response
+namespace TDL.Client.Queue.Abstractions.Response
 {
     public class FatalErrorResponse : IResponse
     {

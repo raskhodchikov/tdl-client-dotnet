@@ -1,11 +1,11 @@
 using System;
 using Apache.NMS;
-using TDL.Client.Abstractions;
-using TDL.Client.Abstractions.Response;
-using TDL.Client.Serialization;
+using TDL.Client.Queue.Abstractions;
+using TDL.Client.Queue.Abstractions.Response;
+using TDL.Client.Queue.Serialization;
 using TDL.Client.Utils;
 
-namespace TDL.Client.Transport
+namespace TDL.Client.Queue.Transport
 {
     public class RemoteBroker : IRemoteBroker
     {
