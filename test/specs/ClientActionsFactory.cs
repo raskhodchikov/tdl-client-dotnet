@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using TDL.Client.Actions;
+using TDL.Client.Queue.Actions;
 
 namespace TDL.Test.Specs
 {

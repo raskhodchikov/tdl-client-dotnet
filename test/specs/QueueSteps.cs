@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using TDL.Client;
 using TDL.Client.Audit;
 using TDL.Test.Specs.SpecItems;
 using TDL.Test.Specs.Utils.Jmx.Broker;
@@ -8,11 +7,13 @@ using TDL.Test.Specs.Utils.Logging;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using System.Diagnostics;
+using TDL.Client;
+using TDL.Client.Queue;
 
 namespace TDL.Test.Specs
 {
     [Binding]
-    public class ClientSteps
+    public class QueueSteps
     {
         private const string Hostname = "localhost";
         private const int Port = 21616;
@@ -22,7 +23,8 @@ namespace TDL.Test.Specs
 
         private RemoteJmxQueue requestQueue;
         private RemoteJmxQueue responseQueue;
-        private TdlClient client;
+        private QueueBasedImplementationRunner queueBasedImplementationRunner;
+        private QueueBasedImplementationRunner.Builder queueBasedImplementationRunnerBuilder;
 
         private long requestCount;
         private long processingTimeMillis = 0;
@@ -37,24 +39,30 @@ namespace TDL.Test.Specs
             responseQueue.Purge();
 
             auditStream.ClearLog();
-            client = TdlClient.Build()
+
+            var config = new ImplementationRunnerConfig()
                 .SetHostname(Hostname)
                 .SetPort(Port)
                 .SetUniqueId(username)
-                .SetAuditStream(auditStream)
-                .Create();
+                .SetAuditStream(auditStream);
+
+            queueBasedImplementationRunnerBuilder = new QueueBasedImplementationRunner.Builder().SetConfig(config);
+            queueBasedImplementationRunner = queueBasedImplementationRunnerBuilder.Create();
         }
 
         [Given(@"^the broker is not available$")]
         public void GivenTheBrokerIsNotAvailable()
         {
             auditStream.ClearLog();
-            client = TdlClient.Build()
-                .SetHostname(Hostname + "1")
+
+            var config = new ImplementationRunnerConfig()
+                .SetHostname("111")
                 .SetPort(Port)
                 .SetUniqueId("X")
-                .SetAuditStream(auditStream)
-                .Create();
+                .SetAuditStream(auditStream);
+
+            queueBasedImplementationRunnerBuilder = new QueueBasedImplementationRunner.Builder().SetConfig(config);
+            queueBasedImplementationRunner = queueBasedImplementationRunnerBuilder.Create();
         }
 
         [Given(@"I receive the following requests:")]
@@ -83,16 +91,17 @@ namespace TDL.Test.Specs
         {
             var processingRuleSpecItems = table.CreateSet<ProcessingRuleSpecItem>().ToList();
 
-            var processingRules = new ProcessingRules();
             processingRuleSpecItems.ForEach(ruleSpec =>
-                processingRules
-                    .On(ruleSpec.Method)
-                    .Call(CallImplementationFactory.Get(ruleSpec.Call))
-                    .Then(ClientActionsFactory.Get(ruleSpec.Action)));
+                queueBasedImplementationRunnerBuilder.WithSolutionFor(
+                    ruleSpec.Method,
+                    CallImplementationFactory.Get(ruleSpec.Call),
+                    ClientActionsFactory.Get(ruleSpec.Action)));
+
+            queueBasedImplementationRunner = queueBasedImplementationRunnerBuilder.Create();
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            client.GoLiveWith(processingRules);
+            queueBasedImplementationRunner.Run();
             stopwatch.Stop();
 
             processingTimeMillis = stopwatch.ElapsedMilliseconds;
@@ -101,7 +110,7 @@ namespace TDL.Test.Specs
         [Then(@"^the time to wait for requests is (\d+)ms$")]
         public void ThenTheTimeToWaitForRequestsIs(int expectedTimeout)
         {
-            Assert.AreEqual(expectedTimeout, client.TimeToWaitForRequests,
+            Assert.AreEqual(expectedTimeout, queueBasedImplementationRunner.RequestTimeoutMilliseconds,
                 "The client request timeout has a different value.");
         }
 

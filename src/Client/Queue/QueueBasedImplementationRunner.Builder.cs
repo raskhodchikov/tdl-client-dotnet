@@ -23,7 +23,7 @@ namespace TDL.Client
                 return this;
             }
 
-            public Builder WithSolutionsFor(string methodName, Func<string[], object> userImplementation)
+            public Builder WithSolutionFor(string methodName, Func<string[], object> userImplementation)
             {
                 deployProcessingRules
                     .On(methodName)
