@@ -2,7 +2,7 @@
 
 namespace TDL.Client.Utils
 {
-    internal static class PathHelper
+    public static class PathHelper
     {
         public static string RepositoryPath { get; }
 

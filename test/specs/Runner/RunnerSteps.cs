@@ -1,11 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using TDL.Client.Audit;
 using TDL.Client.Queue;
 using TDL.Client.Runner;
+using TDL.Client.Utils;
 using TDL.Test.Specs.Queue.Runners;
 using TDL.Test.Specs.Utils.Logging;
+using TDL.Test.Specs.Utils.Extensions;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 
@@ -72,7 +75,9 @@ namespace TDL.Test.Specs.Runner
         [Given(@"the challenges folder is empty")]
         public void GivenTheChallengesFolderIsEmpty()
         {
-            ScenarioContext.Current.Pending();
+            var challengesPath = Path.Combine(PathHelper.RepositoryPath, "challenges");
+            var challengesDirectory = new DirectoryInfo(challengesPath);
+            challengesDirectory.Empty();
         }
 
         [Given(@"there is an implementation runner that prints ""(.*)""")]
@@ -139,20 +144,21 @@ namespace TDL.Test.Specs.Runner
         [Then(@"the file ""(.*)"" should contain")]
         public void ThenTheFileShouldContain(string file, string text)
         {
-            ScenarioContext.Current.Pending();
+            var fileContent = File.ReadAllText(file);
+            Assert.AreEqual(text, fileContent, "Contents of the file is not what is expected");
         }
 
         [Then(@"the recording system should be notified with ""(.*)""")]
         public void ThenTheRecordingSystemShouldBeNotifiedWith(string expectedOutput)
         {
             recordingServerStub.VerifyEndpointWasHit("/notify", "POST", expectedOutput);
-            ScenarioContext.Current.Pending();
         }
 
         [Then(@"the implementation runner should be run with the provided implementations")]
         public void ThenTheImplementationRunnerShouldBeRunWithTheProvidedImplementations()
         {
-            ScenarioContext.Current.Pending();
+            var total = auditStream.ToDisplayableString();
+            Assert.IsTrue(total.Contains(implementationRunnerMessage));
         }
 
         [Then(@"the server interaction should contain the following lines:")]

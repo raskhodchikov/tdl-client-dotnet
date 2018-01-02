@@ -62,6 +62,7 @@
     <Compile Include="Queue\SpecItems\OutputSpecItem.cs" />
     <Compile Include="Queue\SpecItems\PayloadSpecItem.cs" />
     <Compile Include="Queue\SpecItems\ProcessingRuleSpecItem.cs" />
+    <Compile Include="Utils\Extensions\DirectoryExtension.cs" />
     <Compile Include="Utils\Jmx\Broker\JolokiaResponses\JolokiaBrowseResponseValueItem.cs" />
     <Compile Include="Utils\Jmx\Broker\JolokiaResponses\JolokiaResponse.cs" />
     <Compile Include="Utils\Jmx\Broker\JolokiaSession.cs" />
