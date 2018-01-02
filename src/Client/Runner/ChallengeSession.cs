@@ -3,13 +3,13 @@ using TDL.Client.Queue;
 
 namespace TDL.Client.Runner
 {
-    class ChallengeSession
+    public class ChallengeSession
     {
         private ChallengeSessionConfig config;
         private IImplementationRunner implementationRunner;
         private RecordingSystem recordingSystem;
         private ChallengeServerClient challengeServerClient;
-        private IActionProvider userInputCallback;
+        private Func<string> userInputCallback;
 
         public static ChallengeSession ForRunner(IImplementationRunner implementationRunner)
         {
@@ -27,7 +27,7 @@ namespace TDL.Client.Runner
             return this;
         }
 
-        public ChallengeSession WithActionProvider(IActionProvider callback)
+        public ChallengeSession WithActionProvider(Func<string> callback)
         {
             userInputCallback = callback;
             return this;
@@ -60,7 +60,7 @@ namespace TDL.Client.Runner
                 bool shouldContinue = CheckStatusOfChallenge();
                 if (shouldContinue)
                 {
-                    var userInput = userInputCallback.Get();
+                    var userInput = userInputCallback();
                     auditStream.WriteLine("Selected action is: " + userInput);
                     var roundDescription = ExecuteUserAction(userInput);
                     RoundManagement.SaveDescription(recordingSystem, roundDescription, auditStream);

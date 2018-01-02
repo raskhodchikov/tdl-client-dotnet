@@ -91,7 +91,6 @@
     <Compile Include="Runner\ChallengeSessionConfig.cs" />
     <Compile Include="Runner\ClientErrorException.cs" />
     <Compile Include="Runner\Exceptions\RecordingSystemNotReachable.cs" />
-    <Compile Include="Runner\IActionProvider.cs" />
     <Compile Include="Runner\IRoundChangesListener.cs" />
     <Compile Include="Runner\OtherCommunicationException.cs" />
     <Compile Include="Runner\RecordingSystem.cs" />

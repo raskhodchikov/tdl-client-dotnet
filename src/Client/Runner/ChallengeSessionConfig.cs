@@ -2,7 +2,7 @@
 
 namespace TDL.Client.Runner
 {
-    class ChallengeSessionConfig
+    public class ChallengeSessionConfig
     {
         public IAuditStream AuditStream;
         public bool RecordingSystemShouldBeOn { get; private set; }
