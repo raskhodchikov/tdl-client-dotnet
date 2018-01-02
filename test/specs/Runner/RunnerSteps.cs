@@ -140,7 +140,7 @@ namespace TDL.Test.Specs.Runner
         [Then(@"the server interaction should look like:")]
         public void ThenTheServerInteractionShouldLookLike(string expectedOutput)
         {
-            var total = auditStream.ToDisplayableString();
+            var total = auditStream.ToString();
             Assert.IsTrue(total.Contains(expectedOutput), "Expected string is not contained in output");
         }
 
@@ -160,14 +160,14 @@ namespace TDL.Test.Specs.Runner
         [Then(@"the implementation runner should be run with the provided implementations")]
         public void ThenTheImplementationRunnerShouldBeRunWithTheProvidedImplementations()
         {
-            var total = auditStream.ToDisplayableString();
+            var total = auditStream.ToString();
             Assert.IsTrue(total.Contains(implementationRunnerMessage));
         }
 
         [Then(@"the server interaction should contain the following lines:")]
         public void ThenTheServerInteractionShouldContainTheFollowingLines(string expectedOutput)
         {
-            var total = auditStream.ToDisplayableString();
+            var total = auditStream.ToString();
             var lines = expectedOutput.Split('\n');
             foreach (var line in lines)
             {
@@ -178,7 +178,7 @@ namespace TDL.Test.Specs.Runner
         [Then(@"the client should not ask the user for input")]
         public void ThenTheClientShouldNotAskTheUserForInput()
         {
-            var total = auditStream.ToDisplayableString();
+            var total = auditStream.ToString();
             Assert.IsFalse(total.Contains("Selected action is:"));
         }
     }
