@@ -34,8 +34,7 @@ build:
 before_test:
 - ps: >-
     cd broker
-
-    .\activemq-wrapper.ps1
+    python activemq-wrapper.py start
 
 deploy:
 - provider: NuGet
