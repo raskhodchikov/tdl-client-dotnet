@@ -9,9 +9,10 @@ namespace TDL.Client.Utils
         static PathHelper()
         {
             var exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            var srcPath = FindParent(exePath, "src");
+            var srcPath = FindParent(exePath, "bin");
 
-            RepositoryPath = new DirectoryInfo(srcPath).Parent.FullName;
+            //TODO: Find a path in a more reliable way.
+            RepositoryPath = new DirectoryInfo(srcPath).Parent.Parent.Parent.FullName;
         }
 
         private static string FindParent(string path, string parentName)

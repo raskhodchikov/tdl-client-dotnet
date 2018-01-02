@@ -1,4 +1,5 @@
 ﻿using RestSharp;
+using TDL.Test.Specs.Utils;
 
 namespace TDL.Test.Specs.Runner
 {
@@ -13,7 +14,7 @@ namespace TDL.Test.Specs.Runner
 
         public void CreateNewMapping(ServerConfig config)
         {
-            var request = new RestRequest("__admin/mappings/new", Method.POST);
+            var request = new RestRequest("__admin/mappings/new", Method.POST) { JsonSerializer = new NewtonsoftJsonSerializer() };
             request.AddJsonBody(new WiremockMapping(config));
 
             restClient.Execute(request);
@@ -21,7 +22,7 @@ namespace TDL.Test.Specs.Runner
 
         public void Reset()
         {
-            var request = new RestRequest("__admin/reset", Method.POST);
+            var request = new RestRequest("__admin/reset", Method.POST) { JsonSerializer = new NewtonsoftJsonSerializer() };
 
             restClient.Execute(request);
         }
@@ -33,7 +34,7 @@ namespace TDL.Test.Specs.Runner
 
         private int CountRequestsWithEndpoint(string endpoint, string verb, string body)
         {
-            var request = new RestRequest("__admin/requests/count", Method.POST);
+            var request = new RestRequest("__admin/requests/count", Method.POST) { JsonSerializer = new NewtonsoftJsonSerializer() };
             var requestData = new MatchingDataRequest
             {
                 Url = endpoint,

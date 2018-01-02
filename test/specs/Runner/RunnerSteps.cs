@@ -48,7 +48,7 @@ namespace TDL.Test.Specs.Runner
         {
             table.CreateSet<ServerConfig>()
                 .ToList()
-                .ForEach(config => recordingServerStub.CreateNewMapping(config));
+                .ForEach(config => challengeServerStub.CreateNewMapping(config));
         }
 
         [Given(@"There is a recording server running on ""(.*)"" port (.*)")]
@@ -63,7 +63,7 @@ namespace TDL.Test.Specs.Runner
         {
             table.CreateSet<ServerConfig>()
                 .ToList()
-                .ForEach(config => challengeServerStub.CreateNewMapping(config));
+                .ForEach(config => recordingServerStub.CreateNewMapping(config));
         }
 
         [Given(@"the action input comes from a provider returning ""(.*)""")]
@@ -76,8 +76,11 @@ namespace TDL.Test.Specs.Runner
         public void GivenTheChallengesFolderIsEmpty()
         {
             var challengesPath = Path.Combine(PathHelper.RepositoryPath, "challenges");
-            var challengesDirectory = new DirectoryInfo(challengesPath);
-            challengesDirectory.Empty();
+            if (Directory.Exists(challengesPath))
+            {
+                var challengesDirectory = new DirectoryInfo(challengesPath);
+                challengesDirectory.Empty();
+            }
         }
 
         [Given(@"there is an implementation runner that prints ""(.*)""")]

@@ -18,5 +18,7 @@ namespace TDL.Test.Specs.Utils.Logging
         {
             log.AppendLine(value);
         }
+
+        public override string ToString() => GetLog();
     }
 }

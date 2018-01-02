@@ -35,6 +35,11 @@ namespace TDL.Client.Runner
 
         public static string SaveDescription(string label, string description, IAuditStream auditStream)
         {
+            if (!Directory.Exists(ChallengesPath))
+            {
+                Directory.CreateDirectory(ChallengesPath);
+            }
+
             // Save description.
             var descriptionPath = Path.Combine(ChallengesPath, $"{label}.txt");
 
