@@ -147,7 +147,8 @@ namespace TDL.Test.Specs.Runner
         [Then(@"the file ""(.*)"" should contain")]
         public void ThenTheFileShouldContain(string file, string text)
         {
-            var fileContent = File.ReadAllText(file);
+            var fileFullPath = Path.Combine(PathHelper.RepositoryPath, file);
+            var fileContent = File.ReadAllText(fileFullPath);
             Assert.AreEqual(text, fileContent, "Contents of the file is not what is expected");
         }
 
