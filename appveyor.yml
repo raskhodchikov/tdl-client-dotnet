@@ -32,7 +32,10 @@ build:
   verbosity: minimal
 
 before_test:
-- test-setup.cmd
+- ps: $TestSetup = Start-Process test-setup.cmd -PassThru
+
+after_test:
+- ps: Stop-Process $TestSetup -Id $TestSetup.Id
 
 deploy:
 - provider: NuGet
