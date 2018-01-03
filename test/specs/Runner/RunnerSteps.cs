@@ -141,6 +141,7 @@ namespace TDL.Test.Specs.Runner
         public void ThenTheServerInteractionShouldLookLike(string expectedOutput)
         {
             var total = auditStream.ToString();
+            total = total.TrimEnd(Environment.NewLine.ToCharArray()).Replace("\\", "/");
             Assert.IsTrue(total.Contains(expectedOutput), "Expected string is not contained in output");
         }
 
@@ -149,6 +150,9 @@ namespace TDL.Test.Specs.Runner
         {
             var fileFullPath = Path.Combine(PathHelper.RepositoryPath, file);
             var fileContent = File.ReadAllText(fileFullPath);
+
+            text = text.TrimEnd(Environment.NewLine.ToCharArray());
+
             Assert.AreEqual(text, fileContent, "Contents of the file is not what is expected");
         }
 
