@@ -9,9 +9,6 @@ environment:
     secure: n99aLyTg0+72IVcTor23VDwAXAEsKVPg3kxSod2kI4aVEY7AMtHVy1IJdmX/Zy85
   packageName: TDL.Client
   
-init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
 install:
 - cmd: git submodule update --init --recursive
   
@@ -34,11 +31,10 @@ build:
   publish_nuget_symbols: true
   verbosity: minimal
 
-before_test:
-- ps: $TestSetup = Start-Process test-setup.cmd -Wait
-
-after_test:
-- ps: Stop-Process $TestSetup -Id $TestSetup.Id
+test_script:
+- ps: >-
+    test-setup.cmd
+    nunit3-console "$($env:APPVEYOR_BUILD_FOLDER)\test\specs\bin\Release\TDL.Test.Specs.dll"
 
 deploy:
 - provider: NuGet
