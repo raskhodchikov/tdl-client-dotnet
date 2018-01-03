@@ -33,9 +33,10 @@ build:
 
 before_test:
 - ps: >-
-    cd broker
+    python wiremock/fetch-wiremock-and-run.py start 41375
+    python wiremock/fetch-wiremock-and-run.py start 8222
 
-    python activemq-wrapper.py start
+    python broker/activemq-wrapper.py start
 
 deploy:
 - provider: NuGet
