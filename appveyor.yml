@@ -34,9 +34,6 @@ build:
   publish_nuget_symbols: true
   verbosity: minimal
 
-test_script:
-- run-tests.cmd
-
 deploy:
 - provider: NuGet
   api_key: $(api_key)
