@@ -32,7 +32,7 @@ build:
   verbosity: minimal
 
 test_script:
-- test-setup.cmd
+- run-tests.cmd
 
 deploy:
 - provider: NuGet
