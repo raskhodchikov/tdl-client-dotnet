@@ -9,3 +9,5 @@ echo Started WireMock process #2
 echo Starting broker process
 python broker/activemq-wrapper.py start
 echo Started broker process
+
+nunit3-console C:\projects\tdl-client-dotnet\test\specs\bin\Release\TDL.Test.Specs.dll
