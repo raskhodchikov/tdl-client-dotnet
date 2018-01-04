@@ -9,6 +9,9 @@ environment:
     secure: n99aLyTg0+72IVcTor23VDwAXAEsKVPg3kxSod2kI4aVEY7AMtHVy1IJdmX/Zy85
   packageName: TDL.Client
   
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  
 install:
 - cmd: git submodule update --init --recursive
   
