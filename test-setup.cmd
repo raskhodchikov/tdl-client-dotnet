@@ -11,3 +11,7 @@ python broker/activemq-wrapper.py start
 echo Started broker process
 
 nunit3-console C:\projects\tdl-client-dotnet\test\specs\bin\Release\TDL.Test.Specs.dll
+
+python wiremock/fetch-wiremock-and-run.py stop 41375
+python wiremock/fetch-wiremock-and-run.py stop 8222
+python broker/activemq-wrapper.py stop
