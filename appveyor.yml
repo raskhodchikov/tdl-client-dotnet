@@ -33,7 +33,6 @@ build:
 
 test_script:
 - test-setup.cmd
-- ps: nunit3-console "$($env:APPVEYOR_BUILD_FOLDER)\test\specs\bin\Release\TDL.Test.Specs.dll"
 
 deploy:
 - provider: NuGet
