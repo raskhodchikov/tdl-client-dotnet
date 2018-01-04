@@ -9,4 +9,5 @@ python fetch-wiremock-and-run.py stop 41375
 python fetch-wiremock-and-run.py stop 8222
 :: python broker/activemq-wrapper.py stop
 
-EXIT TestResult
+ECHO %TestResult%
+EXIT %TestResult%
