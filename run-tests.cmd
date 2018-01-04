@@ -1,12 +1,12 @@
 python wiremock/fetch-wiremock-and-run.py start 41375
 python wiremock/fetch-wiremock-and-run.py start 8222
-:: python broker/activemq-wrapper.py start
+python activemq-wrapper.py start
 
 nunit3-console test/specs/bin/Release/TDL.Test.Specs.dll
 SET TestResult=%ERRORLEVEL%
 
 python wiremock/fetch-wiremock-and-run.py stop 41375
-:: python wiremock/fetch-wiremock-and-run.py stop 8222
-:: python broker/activemq-wrapper.py stop
+python wiremock/fetch-wiremock-and-run.py stop 8222
+python activemq-wrapper.py stop
 
 EXIT %TestResult%
